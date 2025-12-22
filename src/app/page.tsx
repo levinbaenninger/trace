@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export default async function Home() {
+const Home = async () => {
   const user = await currentUser();
 
   return (
@@ -49,4 +49,6 @@ export default async function Home() {
       </SignedIn>
     </div>
   );
-}
+};
+
+export default Home;

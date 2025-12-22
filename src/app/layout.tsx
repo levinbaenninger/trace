@@ -10,8 +10,11 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Trace",
-  description: "Trace",
+  title: {
+    default: "Trace",
+    template: "%s | Trace",
+  },
+  description: "Trace - ein lebendiges Archiv.",
 };
 
 interface Props {
@@ -20,7 +23,7 @@ interface Props {
 
 const RootLayout = ({ children }: Props) => {
   return (
-    <html lang="en">
+    <html lang="de-CH">
       <body className={`${geistSans.variable} antialiased`}>
         <Providers>{children}</Providers>
       </body>
