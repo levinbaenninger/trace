@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  check:
+    name: 🔍 Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🛠️ Setup
+        uses: ./.github/actions/setup-bun
+
+      - name: ✨ Lint & Format
+        run: bun check
+
+  typecheck:
+    name: 🔷 Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🛠️ Setup
+        uses: ./.github/actions/setup-bun
+
+      - name: 📘 Type check
+        run: bun typecheck
+
+  build:
+    name: 🏗️ Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🛠️ Setup
+        uses: ./.github/actions/setup-bun
+
+      - name: 🚀 Build
+        run: bun build
