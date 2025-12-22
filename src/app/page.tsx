@@ -1,52 +1,27 @@
-import { SignedIn, SignOutButton, UserButton } from "@clerk/nextjs";
-import { currentUser } from "@clerk/nextjs/server";
+import { RedirectToSignIn } from "@clerk/nextjs";
+import { auth, currentUser } from "@clerk/nextjs/server";
 
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { UserProfileCard } from "@/modules/auth/components/user-profile-card";
+import { TaskList } from "@/modules/tasks/components/task-list/task-list";
 
 const Home = async () => {
+  const { userId } = await auth();
+
+  if (!userId) {
+    <RedirectToSignIn />;
+  }
+
   const user = await currentUser();
+  if (!user) {
+    return <RedirectToSignIn />;
+  }
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
-      <SignedIn>
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
-            <div className="mb-1 flex justify-center">
-              <UserButton />
-            </div>
-            <CardTitle>Welcome back!</CardTitle>
-            <CardDescription>
-              {user?.emailAddresses[0]?.emailAddress}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-4">
-            <div className="flex flex-col gap-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Name:</span>
-                <span className="font-medium">
-                  {user?.firstName} {user?.lastName}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">User ID:</span>
-                <span className="font-mono text-xs">{user?.id}</span>
-              </div>
-            </div>
-            <SignOutButton>
-              <Button className="w-full" variant="outline">
-                Sign Out
-              </Button>
-            </SignOutButton>
-          </CardContent>
-        </Card>
-      </SignedIn>
+    <div className="min-h-screen p-4">
+      <div className="mx-auto max-w-4xl space-y-6 py-8">
+        <UserProfileCard user={user} />
+        <TaskList />
+      </div>
     </div>
   );
 };
