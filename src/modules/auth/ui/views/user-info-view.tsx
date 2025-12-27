@@ -1,15 +1,15 @@
 import type { User } from "@clerk/nextjs/server";
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { UserAvatarHeader } from "./user-avatar-header";
-import { UserInfoDetails } from "./user-info-details";
-import { UserSignOutButton } from "./user-sign-out-button";
+import { UserAvatarHeader } from "../components/user-avatar-header";
+import { UserInfoDetails } from "../components/user-info-details";
+import { UserSignOutButton } from "../components/user-sign-out-button";
 
-interface Props {
+interface UserInfoViewProps {
   user: User;
 }
 
-export const UserProfileCard = ({ user }: Props) => {
+export const UserInfoView = ({ user }: UserInfoViewProps) => {
   const initials = user.firstName?.[0] || user.lastName?.[0] || "";
 
   return (

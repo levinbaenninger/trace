@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 
+import { Toaster } from "@/components/ui/sonner";
 import { Providers } from "@/providers/providers";
 import "./globals.css";
 
@@ -26,6 +27,7 @@ const RootLayout = ({ children }: Props) => {
     <html lang="de-CH">
       <body className={`${geistSans.variable} antialiased`}>
         <Providers>{children}</Providers>
+        <Toaster />
       </body>
     </html>
   );

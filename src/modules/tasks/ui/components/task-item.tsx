@@ -4,12 +4,13 @@ import { Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import type { Id } from "../../../../convex/_generated/dataModel";
+import type { Id } from "../../../../../convex/_generated/dataModel";
 
 interface Props {
   id: Id<"tasks">;
   text: string;
   isCompleted: boolean;
+  isDeleting?: boolean;
   onToggle: (id: Id<"tasks">) => void;
   onDelete: (id: Id<"tasks">) => void;
 }
@@ -18,6 +19,7 @@ export const TaskItem = ({
   id,
   text,
   isCompleted,
+  isDeleting,
   onToggle,
   onDelete,
 }: Props) => {
@@ -38,6 +40,8 @@ export const TaskItem = ({
       </label>
       <Button
         className="h-8 w-8 text-destructive hover:text-destructive"
+        disabled={isDeleting}
+        loading={isDeleting}
         onClick={() => onDelete(id)}
         size="icon"
         variant="ghost"

@@ -4,12 +4,15 @@ import { useForm } from "@tanstack/react-form";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { useTasks } from "../hooks/use-tasks";
-import { createTaskSchema } from "../schemas/task.schema";
+import { createTaskSchema } from "../../schemas/task.schema";
 
-export const TaskForm = () => {
-  const { handleCreate } = useTasks();
+interface TaskFormProps {
+  disabled?: boolean;
+  isLoading?: boolean;
+  onSubmit: (text: string) => Promise<void>;
+}
 
+export const TaskForm = ({ disabled, isLoading, onSubmit }: TaskFormProps) => {
   const form = useForm({
     defaultValues: {
       text: "",
@@ -18,7 +21,7 @@ export const TaskForm = () => {
       onSubmit: createTaskSchema,
     },
     onSubmit: async ({ value }) => {
-      await handleCreate(value.text);
+      await onSubmit(value.text);
       form.reset();
     },
   });
@@ -41,11 +44,16 @@ export const TaskForm = () => {
                 <Input
                   aria-invalid={isInvalid}
                   autoComplete="off"
+                  disabled={disabled || isLoading}
                   id={field.name}
                   name={field.name}
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
-                  placeholder="Add a new task..."
+                  placeholder={
+                    disabled
+                      ? "Maximum number of tasks reached"
+                      : "Add a new task..."
+                  }
                   value={field.state.value}
                 />
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
@@ -55,7 +63,13 @@ export const TaskForm = () => {
           name="text"
         />
       </FieldGroup>
-      <Button type="submit">Add</Button>
+      <Button
+        disabled={disabled || isLoading}
+        loading={isLoading}
+        type="submit"
+      >
+        Add
+      </Button>
     </form>
   );
 };

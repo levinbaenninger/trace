@@ -8,7 +8,15 @@
  * @module
  */
 
-import type * as tasks from "../tasks.js";
+import type * as _types_errors_auth from "../_types/errors/auth.js";
+import type * as _types_errors_utils from "../_types/errors/utils.js";
+import type * as _utils_auth from "../_utils/auth.js";
+import type * as tasks__lib_constants from "../tasks/_lib/constants.js";
+import type * as tasks__lib_errors from "../tasks/_lib/errors.js";
+import type * as tasks_create from "../tasks/create.js";
+import type * as tasks_list from "../tasks/list.js";
+import type * as tasks_remove from "../tasks/remove.js";
+import type * as tasks_toggle from "../tasks/toggle.js";
 
 import type {
   ApiFromModules,
@@ -17,7 +25,15 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
-  tasks: typeof tasks;
+  "_types/errors/auth": typeof _types_errors_auth;
+  "_types/errors/utils": typeof _types_errors_utils;
+  "_utils/auth": typeof _utils_auth;
+  "tasks/_lib/constants": typeof tasks__lib_constants;
+  "tasks/_lib/errors": typeof tasks__lib_errors;
+  "tasks/create": typeof tasks_create;
+  "tasks/list": typeof tasks_list;
+  "tasks/remove": typeof tasks_remove;
+  "tasks/toggle": typeof tasks_toggle;
 }>;
 
 /**

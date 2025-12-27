@@ -1,7 +1,7 @@
 import { NavigationMenu as NavigationMenuPrimitive } from "@base-ui/react/navigation-menu"
 import { cva } from "class-variance-authority"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/utils/class"
 import { ChevronDownIcon } from "lucide-react"
 
 function NavigationMenu({
@@ -156,8 +156,6 @@ export {
   NavigationMenuIndicator,
   NavigationMenuItem,
   NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-  NavigationMenuPositioner,
+  NavigationMenuList, NavigationMenuPositioner, NavigationMenuTrigger,
+  navigationMenuTriggerStyle
 }
