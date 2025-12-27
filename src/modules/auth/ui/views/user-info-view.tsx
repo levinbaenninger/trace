@@ -16,7 +16,7 @@ export const UserInfoView = ({ user }: UserInfoViewProps) => {
     <Card className="w-full">
       <CardHeader className="text-center">
         <UserAvatarHeader
-          email={user.emailAddresses[0].emailAddress}
+          email={user.emailAddresses[0]?.emailAddress ?? "No email address"}
           initials={initials}
         />
       </CardHeader>

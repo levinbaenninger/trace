@@ -9,12 +9,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { parseError } from "@/utils/error/parse";
 import { api } from "../../../../../convex/_generated/api";
 import type { Id } from "../../../../../convex/_generated/dataModel";
+import { TASK_LIMIT } from "../../../../../convex/tasks/_lib/constants";
 import type {
   CreateTaskErrors,
   RemoveTaskErrors,
   ToggleTaskErrors,
 } from "../../../../../convex/tasks/_lib/errors";
-import { TASK_LIMIT } from "../../constants";
 import {
   getCreateTaskErrorMessage,
   getRemoveTaskErrorMessage,
