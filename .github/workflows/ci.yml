@@ -47,4 +47,4 @@ jobs:
         uses: ./.github/actions/setup-bun
 
       - name: 🚀 Build
-        run: bun build
+        run: bun run build
