@@ -25,7 +25,7 @@ interface Props {
 const RootLayout = ({ children }: Props) => {
   return (
     <html lang="de-CH">
-      <body className={`${geistSans.variable} antialiased`}>
+      <body className={`${geistSans.variable} dark antialiased`}>
         <Providers>{children}</Providers>
         <Toaster />
       </body>
