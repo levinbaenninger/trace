@@ -51,8 +51,8 @@ export const TaskForm = ({ disabled, isLoading, onSubmit }: TaskFormProps) => {
                   onChange={(e) => field.handleChange(e.target.value)}
                   placeholder={
                     disabled
-                      ? "Maximum number of tasks reached"
-                      : "Add a new task..."
+                      ? "Maximale Anzahl an Aufgaben erreicht"
+                      : "Neue Aufgabe hinzufügen..."
                   }
                   value={field.state.value}
                 />
@@ -68,7 +68,7 @@ export const TaskForm = ({ disabled, isLoading, onSubmit }: TaskFormProps) => {
         loading={isLoading}
         type="submit"
       >
-        Add
+        Hinzufügen
       </Button>
     </form>
   );

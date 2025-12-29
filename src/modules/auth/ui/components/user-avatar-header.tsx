@@ -14,7 +14,7 @@ export const UserAvatarHeader = ({ email, initials }: Props) => {
       <div className="mb-1 flex justify-center">
         <UserButton fallback={<UserAvatarFallback initials={initials} />} />
       </div>
-      <CardTitle>Welcome back!</CardTitle>
+      <CardTitle>Willkommen zurück!</CardTitle>
       <CardDescription>{email}</CardDescription>
     </>
   );

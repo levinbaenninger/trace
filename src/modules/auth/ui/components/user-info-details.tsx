@@ -14,7 +14,7 @@ export const UserInfoDetails = ({ firstName, lastName, userId }: Props) => {
         </span>
       </div>
       <div className="flex justify-between">
-        <span className="text-muted-foreground">User ID:</span>
+        <span className="text-muted-foreground">Benutzer-ID:</span>
         <span className="font-mono text-xs">{userId}</span>
       </div>
     </div>

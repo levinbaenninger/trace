@@ -15,8 +15,10 @@ export const TaskListEmpty = () => {
         <EmptyMedia variant="icon">
           <AlertCircleIcon />
         </EmptyMedia>
-        <EmptyTitle>No tasks yet</EmptyTitle>
-        <EmptyDescription>Create one above to get started.</EmptyDescription>
+        <EmptyTitle>Noch keine Aufgaben</EmptyTitle>
+        <EmptyDescription>
+          Erstelle eine Aufgabe oben, um zu beginnen.
+        </EmptyDescription>
       </EmptyHeader>
     </Empty>
   );

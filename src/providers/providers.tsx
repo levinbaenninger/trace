@@ -1,5 +1,6 @@
 "use client";
 
+import { deDE } from "@clerk/localizations";
 import { ClerkProvider } from "@clerk/nextjs";
 import { shadcn } from "@clerk/themes";
 import type { ReactNode } from "react";
@@ -13,6 +14,7 @@ export const Providers = ({ children }: { children: ReactNode }) => {
       appearance={{
         theme: shadcn,
       }}
+      localization={deDE}
       signInUrl="/sign-in"
       signUpUrl="/sign-up"
     >
