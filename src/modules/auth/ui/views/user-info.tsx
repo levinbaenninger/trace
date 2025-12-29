@@ -21,7 +21,7 @@ export const UserInfo = () => {
     return <RedirectToSignIn />;
   }
 
-  const initials = `${user.firstName?.[0]}${user.lastName?.[0]}` || "";
+  const initials = `${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`;
 
   return (
     <Card className="w-full">
