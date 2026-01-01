@@ -22,12 +22,8 @@ const NotFoundPage = () => {
           </p>
         </CardContent>
         <CardFooter>
-          <Button
-            nativeButton={false}
-            render={<Link href="/" />}
-            variant="default"
-          >
-            Zur Startseite
+          <Button asChild variant="default">
+            <Link href="/">Zur Startseite</Link>
           </Button>
         </CardFooter>
       </Card>
