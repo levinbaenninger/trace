@@ -56,7 +56,7 @@ const GlobalError = ({ error, reset }: GlobalErrorProps) => {
               </Collapsible>
             </CardContent>
             <CardFooter className="gap-2">
-              <Button onClick={reset} variant="default">
+              <Button onClick={reset} size="sm" variant="default">
                 Erneut versuchen
               </Button>
             </CardFooter>

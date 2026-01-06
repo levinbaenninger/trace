@@ -22,7 +22,7 @@ const NotFoundPage = () => {
           </p>
         </CardContent>
         <CardFooter>
-          <Button asChild variant="default">
+          <Button asChild size="sm" variant="default">
             <Link href="/">Zur Startseite</Link>
           </Button>
         </CardFooter>
