@@ -12,7 +12,7 @@ interface Props {
   reset?: () => void;
 }
 
-export const ErrorState = ({
+export const ErrorCard = ({
   title = "Etwas ist schiefgelaufen",
   message = "Bitte versuche es erneut.",
   reset,

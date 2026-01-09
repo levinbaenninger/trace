@@ -1,7 +1,7 @@
-import { ListSkeleton } from "@/components/list-skeleton";
+import { CommitsLoading } from "@/modules/commits/ui/views/commits";
 
-const CommitsLoading = () => {
-  return <ListSkeleton />;
+const CommitsLoadingPage = () => {
+  return <CommitsLoading />;
 };
 
-export default CommitsLoading;
+export default CommitsLoadingPage;

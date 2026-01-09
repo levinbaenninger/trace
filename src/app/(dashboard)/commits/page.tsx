@@ -20,11 +20,9 @@ const CommitsPage = async () => {
   );
 
   return (
-    <div className="container mx-auto p-4">
-      <ErrorBoundary fallback={<CommitsError />}>
-        <Commits preloadedCommits={preloadedCommits} />
-      </ErrorBoundary>
-    </div>
+    <ErrorBoundary fallback={<CommitsError />}>
+      <Commits preloadedCommits={preloadedCommits} />
+    </ErrorBoundary>
   );
 };
 

@@ -1,7 +1,7 @@
-import { StatsSkeleton } from "@/modules/stats/ui/views/stats-view";
+import { StatsLoading } from "@/modules/stats/ui/views/stats-view";
 
-const StatsLoading = () => {
-  return <StatsSkeleton />;
+const StatsLoadingPage = () => {
+  return <StatsLoading />;
 };
 
-export default StatsLoading;
+export default StatsLoadingPage;

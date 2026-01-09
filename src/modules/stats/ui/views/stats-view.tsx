@@ -13,7 +13,7 @@ import {
   Users,
   XCircle,
 } from "lucide-react";
-
+import { ErrorCard } from "@/components/error-card";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -25,7 +25,7 @@ interface Props {
   preloadedStats: Preloaded<typeof api.stats.get.default>;
 }
 
-export const StatsView = ({ preloadedStats }: Props) => {
+export const Stats = ({ preloadedStats }: Props) => {
   const stats = usePreloadedQuery(preloadedStats);
 
   const issueCompletionRate =
@@ -274,7 +274,7 @@ export const StatsView = ({ preloadedStats }: Props) => {
   );
 };
 
-export const StatsSkeleton = () => {
+export const StatsLoading = () => {
   return (
     <div className="container mx-auto p-4 space-y-6">
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -311,5 +311,14 @@ export const StatsSkeleton = () => {
         </Card>
       </div>
     </div>
+  );
+};
+
+export const StatsError = () => {
+  return (
+    <ErrorCard
+      message="Fehler beim Laden der Statistiken. Bitte versuche es erneut."
+      title="Fehler beim Laden der Statistiken"
+    />
   );
 };

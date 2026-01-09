@@ -5,7 +5,7 @@ import { useMutation, usePreloadedQuery } from "convex/react";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-
+import { ErrorCard } from "@/components/error-card";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,6 +15,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Item, ItemActions, ItemContent } from "@/components/ui/item";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Tooltip,
   TooltipContent,
@@ -183,5 +185,50 @@ export const PullRequests = ({ preloadedPullRequests }: Props) => {
         pullRequest={editingPR ?? undefined}
       />
     </>
+  );
+};
+
+export const PullRequestsLoading = () => {
+  const isMobile = useIsMobile();
+
+  return (
+    <Card>
+      <CardHeader>
+        <Skeleton className="h-6 w-32" />
+        <Skeleton className="h-4 w-1/2" />
+        <CardAction>
+          {!isMobile ? (
+            <Skeleton className="h-9 w-24" />
+          ) : (
+            <Skeleton className="size-9" />
+          )}
+        </CardAction>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="space-y-2">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <Item key={index} variant="outline">
+              <Skeleton className="size-8" />
+              <ItemContent>
+                <Skeleton className="h-4 w-1/2" />
+              </ItemContent>
+              <ItemActions>
+                <Skeleton className="size-8" />
+                <Skeleton className="size-8" />
+              </ItemActions>
+            </Item>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+export const PullRequestsError = () => {
+  return (
+    <ErrorCard
+      message="Fehler beim Laden der Pull Requests. Bitte versuche es erneut."
+      title="Fehler beim Laden der Pull Requests"
+    />
   );
 };

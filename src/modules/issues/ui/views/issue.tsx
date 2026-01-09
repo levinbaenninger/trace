@@ -3,9 +3,10 @@
 import type { Preloaded } from "convex/react";
 import { usePreloadedQuery } from "convex/react";
 import { Calendar } from "lucide-react";
-
+import { ErrorCard } from "@/components/error-card";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { User, UserBadge } from "@/components/user-display";
 import { api } from "../../../../../convex/_generated/api";
 
@@ -67,5 +68,32 @@ export const Issue = ({ preloadedIssue }: Props) => {
         )}
       </CardContent>
     </Card>
+  );
+};
+
+export const IssueLoading = () => {
+  return (
+    <Card>
+      <CardHeader>
+        <Skeleton className="h-8 w-3/4" />
+        <Skeleton className="h-4 w-1/2 mt-2" />
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <Skeleton className="h-32 w-full" />
+        <div className="flex gap-2">
+          <Skeleton className="h-6 w-16" />
+          <Skeleton className="h-6 w-16" />
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+export const IssueError = () => {
+  return (
+    <ErrorCard
+      message="Fehler beim Laden der Issue-Details. Bitte versuche es erneut."
+      title="Fehler beim Laden der Issue-Details"
+    />
   );
 };

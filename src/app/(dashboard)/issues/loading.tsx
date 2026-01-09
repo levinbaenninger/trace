@@ -1,7 +1,7 @@
-import { ListSkeleton } from "@/components/list-skeleton";
+import { IssuesLoading } from "@/modules/issues/ui/views/issues";
 
-const IssuesLoading = () => {
-  return <ListSkeleton />;
+const IssuesLoadingPage = () => {
+  return <IssuesLoading />;
 };
 
-export default IssuesLoading;
+export default IssuesLoadingPage;

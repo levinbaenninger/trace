@@ -5,7 +5,7 @@ import { useMutation, usePreloadedQuery } from "convex/react";
 import { Calendar, GitMerge } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-
+import { ErrorCard } from "@/components/error-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +16,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import { User, UserBadge } from "@/components/user-display";
 import { Issue } from "@/modules/issues/ui/components/issue";
 import { parseError } from "@/utils/error/parse";
@@ -28,7 +29,7 @@ interface Props {
   preloadedPullRequest: Preloaded<typeof api.pullRequests.get.default>;
 }
 
-export const PullRequestDetail = ({ preloadedPullRequest }: Props) => {
+export const PullRequest = ({ preloadedPullRequest }: Props) => {
   const pullRequest = usePreloadedQuery(preloadedPullRequest);
   const mergePullRequest = useMutation(api.pullRequests.merge.default);
 
@@ -148,5 +149,32 @@ export const PullRequestDetail = ({ preloadedPullRequest }: Props) => {
         open={isMergeDialogOpen}
       />
     </>
+  );
+};
+
+export const PullRequestLoading = () => {
+  return (
+    <Card>
+      <CardHeader>
+        <Skeleton className="h-8 w-3/4" />
+        <Skeleton className="h-4 w-1/2 mt-2" />
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <Skeleton className="h-32 w-full" />
+        <div className="flex gap-2">
+          <Skeleton className="h-6 w-16" />
+          <Skeleton className="h-6 w-16" />
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+export const PullRequestError = () => {
+  return (
+    <ErrorCard
+      message="Fehler beim Laden der Pull Request. Bitte versuche es erneut."
+      title="Fehler beim Laden des Pull Requests"
+    />
   );
 };

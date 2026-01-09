@@ -10,7 +10,7 @@ const DashboardLayout = ({ children }: Props) => {
     <div className="min-h-screen flex flex-col">
       <Header />
       <Navigation />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 container mx-auto p-4">{children}</main>
     </div>
   );
 };

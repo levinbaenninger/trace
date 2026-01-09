@@ -3,7 +3,7 @@
 import type { Preloaded } from "convex/react";
 import { usePreloadedQuery } from "convex/react";
 
-import { ErrorState } from "@/components/error-state";
+import { ErrorCard } from "@/components/error-card";
 import {
   Card,
   CardContent,
@@ -11,6 +11,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Item, ItemActions, ItemContent } from "@/components/ui/item";
+import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "../../../../../convex/_generated/api";
 import { CommitItem } from "../components/commit-item";
 import { CommitListEmpty } from "../components/commit-list-empty";
@@ -46,10 +48,37 @@ export const Commits = ({ preloadedCommits }: Props) => {
   );
 };
 
+export const CommitsLoading = () => {
+  return (
+    <Card>
+      <CardHeader>
+        <Skeleton className="h-6 w-32" />
+        <Skeleton className="h-4 w-1/2" />
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="space-y-2">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <Item key={index} variant="outline">
+              <Skeleton className="size-8" />
+              <ItemContent>
+                <Skeleton className="h-4 w-1/2" />
+              </ItemContent>
+              <ItemActions>
+                <Skeleton className="size-8" />
+                <Skeleton className="size-8" />
+              </ItemActions>
+            </Item>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
 export const CommitsError = () => {
   return (
-    <ErrorState
-      message="Bitte versuche es erneut."
+    <ErrorCard
+      message="Fehler beim Laden der Commits. Bitte versuche es erneut."
       title="Fehler beim Laden der Commits"
     />
   );
