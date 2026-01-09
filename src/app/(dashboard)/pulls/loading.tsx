@@ -1,7 +1,7 @@
-import { ListSkeleton } from "@/components/list-skeleton";
+import { PullRequestsLoading } from "@/modules/pull-requests/ui/views/pull-requests";
 
-const PullRequestsLoading = () => {
-  return <ListSkeleton />;
+const PullRequestsLoadingPage = () => {
+  return <PullRequestsLoading />;
 };
 
-export default PullRequestsLoading;
+export default PullRequestsLoadingPage;
