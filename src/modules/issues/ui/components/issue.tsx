@@ -25,9 +25,9 @@ export const Issue = ({ issue, onEdit, onDelete, isDeleting }: IssueProps) => {
     <Item variant="outline">
       <ItemMedia variant="icon">
         {issue.status === "open" ? (
-          <CircleDot className="text-green-600" />
+          <CircleDot className="text-open" />
         ) : (
-          <CircleCheck className="text-indigo-500" />
+          <CircleCheck className="text-closed" />
         )}
       </ItemMedia>
       <ItemContent>

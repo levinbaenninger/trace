@@ -1,6 +1,6 @@
 "use client";
 
-import { GitMerge, Pencil, Trash2 } from "lucide-react";
+import { GitMerge, GitPullRequest, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -29,9 +29,11 @@ export const PullRequest = ({
   return (
     <Item variant="outline">
       <ItemMedia variant="icon">
-        <GitMerge
-          className={pullRequest.merged ? "text-indigo-500" : "text-green-600"}
-        />
+        {pullRequest.merged ? (
+          <GitMerge className="text-closed" />
+        ) : (
+          <GitPullRequest className="text-open" />
+        )}
       </ItemMedia>
       <ItemContent>
         <ItemTitle className="hover:underline">
