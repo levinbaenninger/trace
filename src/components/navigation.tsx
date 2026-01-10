@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  BarChart3,
-  BookOpen,
-  CircleDot,
-  GitCommit,
-  GitPullRequest,
-} from "lucide-react";
+import { BookOpen, CircleDot, GitCommit, GitPullRequest } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -17,7 +11,6 @@ const navItems = [
   { href: "/commits", label: "Commits", icon: GitCommit },
   { href: "/issues", label: "Issues", icon: CircleDot },
   { href: "/pulls", label: "Pull Requests", icon: GitPullRequest },
-  { href: "/stats", label: "Statistiken", icon: BarChart3 },
 ] as const;
 
 export const Navigation = () => {
