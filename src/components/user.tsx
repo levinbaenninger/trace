@@ -1,19 +1,17 @@
 "use client";
 
-import { useQuery } from "convex/react";
-import { User as UserIcon } from "lucide-react";
+import type { FunctionReturnType } from "convex/server";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { api } from "../../convex/_generated/api";
+import type { api } from "../../convex/_generated/api";
 
 interface UserProps {
   userId: string;
   showAvatar?: boolean;
+  users: FunctionReturnType<typeof api.users.list.default>;
 }
 
-export const User = ({ userId, showAvatar = false }: UserProps) => {
-  const users = useQuery(api.users.list.default);
-
+export const User = ({ userId, showAvatar = false, users }: UserProps) => {
   const user = users?.find((u) => u.id === userId);
   const displayName = user?.name || userId.split("|")[1] || userId;
 
@@ -32,22 +30,4 @@ export const User = ({ userId, showAvatar = false }: UserProps) => {
   }
 
   return <span className="text-sm">{displayName}</span>;
-};
-
-interface UserBadgeProps {
-  userId: string;
-}
-
-export const UserBadge = ({ userId }: UserBadgeProps) => {
-  const users = useQuery(api.users.list.default);
-
-  const user = users?.find((u) => u.id === userId);
-  const displayName = user?.name || userId.split("|")[1] || userId;
-
-  return (
-    <div className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium">
-      <UserIcon className="h-3 w-3" />
-      {displayName}
-    </div>
-  );
 };

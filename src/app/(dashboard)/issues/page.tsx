@@ -13,13 +13,16 @@ const IssuesPage = async () => {
     return <RedirectToSignIn />;
   }
 
-  const preloadedIssues = await preloadQuery(
-    api.issues.list.default,
-    {},
-    { token: await getToken() }
-  );
+  const token = await getToken();
 
-  return <Issues preloadedIssues={preloadedIssues} />;
+  const [preloadedIssues, preloadedUsers] = await Promise.all([
+    preloadQuery(api.issues.list.default, {}, { token }),
+    preloadQuery(api.users.list.default, {}, { token }),
+  ]);
+
+  return (
+    <Issues preloadedIssues={preloadedIssues} preloadedUsers={preloadedUsers} />
+  );
 };
 
 export default IssuesPage;

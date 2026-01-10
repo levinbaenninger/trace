@@ -89,10 +89,15 @@ const PullRequestsCard = ({
 
 interface PullRequestsProps {
   preloadedPullRequests: Preloaded<typeof api.pullRequests.list.default>;
+  preloadedUsers: Preloaded<typeof api.users.list.default>;
 }
 
-export const PullRequests = ({ preloadedPullRequests }: PullRequestsProps) => {
+export const PullRequests = ({
+  preloadedPullRequests,
+  preloadedUsers,
+}: PullRequestsProps) => {
   const pullRequests = usePreloadedQuery(preloadedPullRequests);
+  const users = usePreloadedQuery(preloadedUsers);
   const createPullRequest = useMutation(api.pullRequests.create.default);
   const updatePullRequest = useMutation(api.pullRequests.update.default);
   const removePullRequest = useMutation(api.pullRequests.remove.default);
@@ -197,6 +202,7 @@ export const PullRequests = ({ preloadedPullRequests }: PullRequestsProps) => {
         onSubmit={editingPR ? handleUpdate : handleCreate}
         open={isFormOpen}
         pullRequest={editingPR ?? undefined}
+        users={users}
       />
     </>
   );

@@ -6,6 +6,7 @@ import { AlertCircle, Calendar, GitMerge } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { toast } from "sonner";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,7 +26,8 @@ import {
 } from "@/components/ui/empty";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { User, UserBadge } from "@/components/user-display";
+import { User } from "@/components/user";
+import { UserBadge } from "@/components/user-badge";
 import { Issue } from "@/modules/issues/ui/components/issue";
 import { parseError } from "@/utils/error/parse";
 import { api } from "../../../../../convex/_generated/api";
@@ -54,10 +56,15 @@ const PullRequestCard = ({
 
 interface PullRequestProps {
   preloadedPullRequest: Preloaded<typeof api.pullRequests.get.default>;
+  preloadedUsers: Preloaded<typeof api.users.list.default>;
 }
 
-export const PullRequest = ({ preloadedPullRequest }: PullRequestProps) => {
+export const PullRequest = ({
+  preloadedPullRequest,
+  preloadedUsers,
+}: PullRequestProps) => {
   const pullRequest = usePreloadedQuery(preloadedPullRequest);
+  const users = usePreloadedQuery(preloadedUsers);
   const mergePullRequest = useMutation(api.pullRequests.merge.default);
 
   const [isMergeDialogOpen, setIsMergeDialogOpen] = useState(false);
@@ -91,7 +98,7 @@ export const PullRequest = ({ preloadedPullRequest }: PullRequestProps) => {
                   <Calendar className="h-4 w-4" />
                   <span>{Intl.DateTimeFormat().format(createdAt)}</span>
                 </div>
-                <User showAvatar userId={pullRequest.authorId} />
+                <User showAvatar userId={pullRequest.authorId} users={users} />
               </div>
             </div>
           </div>
@@ -134,7 +141,7 @@ export const PullRequest = ({ preloadedPullRequest }: PullRequestProps) => {
               <h3 className="text-sm font-medium mb-1">Zuweisen an</h3>
               <div className="flex gap-2 flex-wrap">
                 {pullRequest.assignees.map((assignee) => (
-                  <UserBadge key={assignee} userId={assignee} />
+                  <UserBadge key={assignee} userId={assignee} users={users} />
                 ))}
               </div>
             </div>
@@ -145,7 +152,7 @@ export const PullRequest = ({ preloadedPullRequest }: PullRequestProps) => {
               <h3 className="text-sm font-medium mb-1">Reviewer</h3>
               <div className="flex gap-2 flex-wrap">
                 {pullRequest.reviewers.map((reviewer) => (
-                  <UserBadge key={reviewer} userId={reviewer} />
+                  <UserBadge key={reviewer} userId={reviewer} users={users} />
                 ))}
               </div>
             </div>

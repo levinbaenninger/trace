@@ -12,13 +12,19 @@ const PullRequestsPage = async () => {
     return <RedirectToSignIn />;
   }
 
-  const preloadedPullRequests = await preloadQuery(
-    api.pullRequests.list.default,
-    {},
-    { token: await getToken() }
-  );
+  const token = await getToken();
 
-  return <PullRequests preloadedPullRequests={preloadedPullRequests} />;
+  const [preloadedPullRequests, preloadedUsers] = await Promise.all([
+    preloadQuery(api.pullRequests.list.default, {}, { token }),
+    preloadQuery(api.users.list.default, {}, { token }),
+  ]);
+
+  return (
+    <PullRequests
+      preloadedPullRequests={preloadedPullRequests}
+      preloadedUsers={preloadedUsers}
+    />
+  );
 };
 
 export default PullRequestsPage;

@@ -1,15 +1,16 @@
 "use client";
 
-import { useQuery } from "convex/react";
+import type { FunctionReturnType } from "convex/server";
 
 import { MultiSelect } from "@/components/ui/multi-select";
-import { api } from "../../convex/_generated/api";
+import type { api } from "../../convex/_generated/api";
 
 interface UserMultiSelectProps {
   value: string[];
   onChange: (value: string[]) => void;
   disabled?: boolean;
   placeholder?: string;
+  users: FunctionReturnType<typeof api.users.list.default>;
 }
 
 export const UserMultiSelect = ({
@@ -17,9 +18,8 @@ export const UserMultiSelect = ({
   onChange,
   disabled,
   placeholder = "Benutzer auswählen...",
+  users,
 }: UserMultiSelectProps) => {
-  const users = useQuery(api.users.list.default);
-
   const userOptions =
     users?.map((user) => ({
       label: user.name,
@@ -29,10 +29,10 @@ export const UserMultiSelect = ({
   return (
     <MultiSelect
       defaultValue={value}
-      disabled={disabled || !users}
+      disabled={disabled}
       onValueChange={onChange}
       options={userOptions}
-      placeholder={users ? placeholder : "Benutzer laden..."}
+      placeholder={placeholder}
       searchable
     />
   );

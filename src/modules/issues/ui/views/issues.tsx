@@ -85,10 +85,12 @@ const IssuesCard = ({
 
 interface IssuesProps {
   preloadedIssues: Preloaded<typeof api.issues.list.default>;
+  preloadedUsers: Preloaded<typeof api.users.list.default>;
 }
 
-export const Issues = ({ preloadedIssues }: IssuesProps) => {
+export const Issues = ({ preloadedIssues, preloadedUsers }: IssuesProps) => {
   const issues = usePreloadedQuery(preloadedIssues);
+  const users = usePreloadedQuery(preloadedUsers);
   const createIssue = useMutation(api.issues.create.default);
   const updateIssue = useMutation(api.issues.update.default);
   const removeIssue = useMutation(api.issues.remove.default);
@@ -185,6 +187,7 @@ export const Issues = ({ preloadedIssues }: IssuesProps) => {
         onOpenChange={handleFormClose}
         onSubmit={editingIssue ? handleUpdate : handleCreate}
         open={isFormOpen}
+        users={users}
       />
     </>
   );

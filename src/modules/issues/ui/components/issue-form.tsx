@@ -1,6 +1,7 @@
 "use client";
 
 import { useForm } from "@tanstack/react-form";
+import type { FunctionReturnType } from "convex/server";
 import { useEffect } from "react";
 
 import { ResponsiveDialog } from "@/components/responsive-dialog";
@@ -10,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Textarea } from "@/components/ui/textarea";
 import { UserMultiSelect } from "@/components/user-select";
+import { api } from "../../../../../convex/_generated/api";
 import type { Doc } from "../../../../../convex/_generated/dataModel";
 import { PREDEFINED_LABELS } from "../../../../../convex/issues/_lib/constants";
 import {
@@ -24,6 +26,7 @@ interface IssueFormProps {
   onSubmit: (data: CreateIssue) => Promise<void>;
   isLoading?: boolean;
   issue?: Doc<"issues">;
+  users: FunctionReturnType<typeof api.users.list.default>;
 }
 
 const labelOptions = PREDEFINED_LABELS.map((label) => ({
@@ -37,6 +40,7 @@ export const IssueForm = ({
   onSubmit,
   isLoading,
   issue,
+  users,
 }: IssueFormProps) => {
   const form = useForm({
     defaultValues: {
@@ -169,6 +173,7 @@ export const IssueForm = ({
                   disabled={isLoading}
                   onChange={(value) => field.handleChange(value)}
                   placeholder="Zuweisen..."
+                  users={users}
                   value={field.state.value}
                 />
               </Field>

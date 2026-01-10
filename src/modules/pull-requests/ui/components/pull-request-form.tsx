@@ -2,6 +2,7 @@
 
 import { useForm } from "@tanstack/react-form";
 import { useQuery } from "convex/react";
+import type { FunctionReturnType } from "convex/server";
 import { useEffect } from "react";
 
 import { ResponsiveDialog } from "@/components/responsive-dialog";
@@ -26,6 +27,7 @@ interface PullRequestFormProps {
   onSubmit: (data: CreatePullRequest) => Promise<void>;
   isLoading?: boolean;
   pullRequest?: Doc<"pullRequests">;
+  users: FunctionReturnType<typeof api.users.list.default>;
 }
 
 const labelOptions = PREDEFINED_LABELS.map((label) => ({
@@ -39,6 +41,7 @@ export const PullRequestForm = ({
   onSubmit,
   isLoading,
   pullRequest,
+  users,
 }: PullRequestFormProps) => {
   const issues = useQuery(api.issues.list.default);
 
@@ -213,6 +216,7 @@ export const PullRequestForm = ({
                   disabled={isLoading}
                   onChange={(value) => field.handleChange(value)}
                   placeholder="Zuweisen an..."
+                  users={users}
                   value={field.state.value}
                 />
               </Field>
@@ -230,6 +234,7 @@ export const PullRequestForm = ({
                   disabled={isLoading}
                   onChange={(value) => field.handleChange(value)}
                   placeholder="Reviewer auswählen..."
+                  users={users}
                   value={field.state.value}
                 />
               </Field>

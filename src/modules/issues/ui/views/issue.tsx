@@ -4,6 +4,7 @@ import type { Preloaded } from "convex/react";
 import { usePreloadedQuery } from "convex/react";
 import { AlertCircle, Calendar } from "lucide-react";
 import type { ReactNode } from "react";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,7 +17,8 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
-import { User, UserBadge } from "@/components/user-display";
+import { User } from "@/components/user";
+import { UserBadge } from "@/components/user-badge";
 import { api } from "../../../../../convex/_generated/api";
 
 interface IssueCardProps {
@@ -37,10 +39,12 @@ const IssueCard = ({ title = "Issue", children }: IssueCardProps) => {
 
 interface IssueProps {
   preloadedIssue: Preloaded<typeof api.issues.get.default>;
+  preloadedUsers: Preloaded<typeof api.users.list.default>;
 }
 
-export const Issue = ({ preloadedIssue }: IssueProps) => {
+export const Issue = ({ preloadedIssue, preloadedUsers }: IssueProps) => {
   const issue = usePreloadedQuery(preloadedIssue);
+  const users = usePreloadedQuery(preloadedUsers);
   const createdAt = new Date(issue._creationTime);
 
   return (
@@ -54,7 +58,7 @@ export const Issue = ({ preloadedIssue }: IssueProps) => {
                 <Calendar className="h-4 w-4" />
                 <span>{Intl.DateTimeFormat().format(createdAt)}</span>
               </div>
-              <User showAvatar userId={issue.authorId} />
+              <User showAvatar userId={issue.authorId} users={users} />
             </div>
           </div>
         </div>
@@ -86,7 +90,7 @@ export const Issue = ({ preloadedIssue }: IssueProps) => {
             <h3 className="text-sm font-medium mb-1">Zugewiesen an</h3>
             <div className="flex gap-2 flex-wrap">
               {issue.assignees.map((assignee) => (
-                <UserBadge key={assignee} userId={assignee} />
+                <UserBadge key={assignee} userId={assignee} users={users} />
               ))}
             </div>
           </div>
