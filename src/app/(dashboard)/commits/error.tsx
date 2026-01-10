@@ -2,12 +2,12 @@
 
 import { CommitsError } from "@/modules/commits/ui/views/commits";
 
-interface Props {
+interface CommitsErrorPageProps {
   error: Error & { digest?: string };
   reset: () => void;
 }
 
-const CommitsErrorPage = ({ error, reset }: Props) => {
+const CommitsErrorPage = ({ error, reset }: CommitsErrorPageProps) => {
   return <CommitsError error={error} reset={reset} />;
 };
 

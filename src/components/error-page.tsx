@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-interface Props {
+interface ErrorPageProps {
   error: Error & { digest?: string };
   reset: () => void;
   title?: string;
@@ -25,7 +25,7 @@ export const ErrorPage = ({
   title = "Ups! Etwas ist schiefgelaufen",
   description = "Ein unerwarteter Fehler ist aufgetreten. Bitte versuche es erneut oder kontaktiere den Support, wenn das Problem weiterhin besteht.",
   showErrorDetails = true,
-}: Props) => {
+}: ErrorPageProps) => {
   useEffect(() => {
     console.error(error);
   }, [error]);

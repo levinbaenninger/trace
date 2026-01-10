@@ -5,7 +5,7 @@ import { GitMerge } from "lucide-react";
 import { ResponsiveDialog } from "@/components/responsive-dialog";
 import { Button } from "@/components/ui/button";
 
-interface Props {
+interface MergeDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onConfirm: () => void;
@@ -19,7 +19,7 @@ export const MergeDialog = ({
   onConfirm,
   isLoading,
   issueCount,
-}: Props) => {
+}: MergeDialogProps) => {
   const description = `Dies wird diesen Pull Request als merged markieren, einen Commit mit dem PR-Titel erstellen und ${issueCount} verbundene Issue${issueCount !== 1 ? "s" : ""} schliessen. Diese Aktion kann nicht rückgängig gemacht werden.`;
 
   return (

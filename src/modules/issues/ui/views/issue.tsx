@@ -18,11 +18,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { User, UserBadge } from "@/components/user-display";
 import { api } from "../../../../../convex/_generated/api";
 
-interface Props {
+interface IssueProps {
   preloadedIssue: Preloaded<typeof api.issues.get.default>;
 }
 
-export const Issue = ({ preloadedIssue }: Props) => {
+export const Issue = ({ preloadedIssue }: IssueProps) => {
   const issue = usePreloadedQuery(preloadedIssue);
   const createdAt = new Date(issue._creationTime);
 

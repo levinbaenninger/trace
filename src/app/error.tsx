@@ -2,12 +2,12 @@
 
 import { ErrorPage } from "@/components/error-page";
 
-interface Props {
+interface DefaultErrorPageProps {
   error: Error & { digest?: string };
   reset: () => void;
 }
 
-const DefaultErrorPage = ({ error, reset }: Props) => {
+const DefaultErrorPage = ({ error, reset }: DefaultErrorPageProps) => {
   return <ErrorPage error={error} reset={reset} />;
 };
 

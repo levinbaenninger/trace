@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/item";
 import type { Doc, Id } from "../../../../../convex/_generated/dataModel";
 
-interface Props {
+interface PullRequestProps {
   pullRequest: Doc<"pullRequests">;
   onEdit: (pr: Doc<"pullRequests">) => void;
   onDelete: (id: Id<"pullRequests">) => void;
@@ -25,7 +25,7 @@ export const PullRequest = ({
   onEdit,
   onDelete,
   isDeleting,
-}: Props) => {
+}: PullRequestProps) => {
   return (
     <Item variant="outline">
       <ItemMedia variant="icon">

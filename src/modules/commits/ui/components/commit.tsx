@@ -2,6 +2,7 @@
 
 import { EyeIcon, GitCommit } from "lucide-react";
 import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
 import {
   Item,
@@ -12,11 +13,11 @@ import {
 } from "@/components/ui/item";
 import type { Doc } from "../../../../../convex/_generated/dataModel";
 
-interface Props {
+interface CommitProps {
   commit: Doc<"commits">;
 }
 
-export const CommitItem = ({ commit }: Props) => {
+export const Commit = ({ commit }: CommitProps) => {
   return (
     <Item variant="outline">
       <ItemMedia variant="icon">

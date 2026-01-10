@@ -52,11 +52,11 @@ import { PullRequest } from "../components/pull-request";
 import { PullRequestForm } from "../components/pull-request-form";
 import { PullRequestsEmpty } from "../components/pull-requests-empty";
 
-interface Props {
+interface PullRequestsProps {
   preloadedPullRequests: Preloaded<typeof api.pullRequests.list.default>;
 }
 
-export const PullRequests = ({ preloadedPullRequests }: Props) => {
+export const PullRequests = ({ preloadedPullRequests }: PullRequestsProps) => {
   const pullRequests = usePreloadedQuery(preloadedPullRequests);
   const createPullRequest = useMutation(api.pullRequests.create.default);
   const updatePullRequest = useMutation(api.pullRequests.update.default);

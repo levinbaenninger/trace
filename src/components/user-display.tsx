@@ -6,12 +6,12 @@ import { User as UserIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { api } from "../../convex/_generated/api";
 
-interface Props {
+interface UserProps {
   userId: string;
   showAvatar?: boolean;
 }
 
-export const User = ({ userId, showAvatar = false }: Props) => {
+export const User = ({ userId, showAvatar = false }: UserProps) => {
   const users = useQuery(api.users.list.default);
 
   const user = users?.find((u) => u.id === userId);

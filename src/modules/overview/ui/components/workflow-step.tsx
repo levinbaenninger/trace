@@ -1,6 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 
-interface Props {
+interface WorkflowStepProps {
   icon: LucideIcon;
   step: string;
   title: string;
@@ -12,7 +12,7 @@ export const WorkflowStep = ({
   step,
   title,
   description,
-}: Props) => {
+}: WorkflowStepProps) => {
   return (
     <div className="flex gap-4">
       <div className="shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">

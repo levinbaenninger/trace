@@ -6,11 +6,11 @@ import { PullRequest } from "@/modules/pull-requests/ui/views/pull-request";
 import { api } from "../../../../../convex/_generated/api";
 import type { Id } from "../../../../../convex/_generated/dataModel";
 
-interface Props {
+interface PullRequestPageProps {
   params: Promise<{ id: Id<"pullRequests"> }>;
 }
 
-const PullRequestDetailPage = async ({ params }: Props) => {
+const PullRequestPage = async ({ params }: PullRequestPageProps) => {
   const { isAuthenticated } = await auth();
   const { id } = await params;
 
@@ -27,4 +27,4 @@ const PullRequestDetailPage = async ({ params }: Props) => {
   return <PullRequest preloadedPullRequest={preloadedPullRequest} />;
 };
 
-export default PullRequestDetailPage;
+export default PullRequestPage;

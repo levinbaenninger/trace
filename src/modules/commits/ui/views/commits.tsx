@@ -2,8 +2,8 @@
 
 import type { Preloaded } from "convex/react";
 import { usePreloadedQuery } from "convex/react";
-
 import { AlertCircle } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,14 +23,14 @@ import {
 import { Item, ItemActions, ItemContent } from "@/components/ui/item";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "../../../../../convex/_generated/api";
-import { CommitItem } from "../components/commit-item";
+import { Commit } from "../components/commit";
 import { CommitListEmpty } from "../components/commit-list-empty";
 
-interface Props {
+interface CommitsProps {
   preloadedCommits: Preloaded<typeof api.commits.list.default>;
 }
 
-export const Commits = ({ preloadedCommits }: Props) => {
+export const Commits = ({ preloadedCommits }: CommitsProps) => {
   const commits = usePreloadedQuery(preloadedCommits);
 
   const isEmpty = commits.length === 0;
@@ -49,7 +49,7 @@ export const Commits = ({ preloadedCommits }: Props) => {
 
         <div className="space-y-2">
           {commits.map((commit) => (
-            <CommitItem commit={commit} key={commit._id} />
+            <Commit commit={commit} key={commit._id} />
           ))}
         </div>
       </CardContent>

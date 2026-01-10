@@ -20,7 +20,7 @@ import {
   updatePullRequestSchema,
 } from "../../schemas/pull-request.schema";
 
-interface Props {
+interface PullRequestFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (data: CreatePullRequest) => Promise<void>;
@@ -39,7 +39,7 @@ export const PullRequestForm = ({
   onSubmit,
   isLoading,
   pullRequest,
-}: Props) => {
+}: PullRequestFormProps) => {
   const issues = useQuery(api.issues.list.default);
 
   const issueOptions =

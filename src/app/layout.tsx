@@ -18,11 +18,11 @@ export const metadata: Metadata = {
   description: "Trace - ein lebendiges Archiv.",
 };
 
-interface Props {
+interface RootLayoutProps {
   children: React.ReactNode;
 }
 
-const RootLayout = ({ children }: Props) => {
+const RootLayout = ({ children }: RootLayoutProps) => {
   return (
     <html lang="de-CH">
       <body className={`${geistSans.variable} dark antialiased`}>

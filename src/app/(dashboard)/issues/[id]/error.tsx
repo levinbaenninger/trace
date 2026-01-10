@@ -2,12 +2,12 @@
 
 import { IssueError } from "@/modules/issues/ui/views/issue";
 
-interface Props {
+interface IssueErrorPageProps {
   error: Error & { digest?: string };
   reset: () => void;
 }
 
-const IssueErrorPage = ({ error, reset }: Props) => {
+const IssueErrorPage = ({ error, reset }: IssueErrorPageProps) => {
   return <IssueError error={error} reset={reset} />;
 };
 

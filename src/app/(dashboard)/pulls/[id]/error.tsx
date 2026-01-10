@@ -2,12 +2,12 @@
 
 import { PullRequestError } from "@/modules/pull-requests/ui/views/pull-request";
 
-interface Props {
+interface PullRequestErrorPageProps {
   error: Error & { digest?: string };
   reset: () => void;
 }
 
-const PullRequestErrorPage = ({ error, reset }: Props) => {
+const PullRequestErrorPage = ({ error, reset }: PullRequestErrorPageProps) => {
   return <PullRequestError error={error} reset={reset} />;
 };
 

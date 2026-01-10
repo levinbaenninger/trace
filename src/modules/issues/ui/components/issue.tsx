@@ -13,14 +13,14 @@ import {
 } from "@/components/ui/item";
 import type { Doc, Id } from "../../../../../convex/_generated/dataModel";
 
-interface Props {
+interface IssueProps {
   issue: Doc<"issues">;
   onEdit?: (issue: Doc<"issues">) => void;
   onDelete?: (id: Id<"issues">) => void;
   isDeleting?: boolean;
 }
 
-export const Issue = ({ issue, onEdit, onDelete, isDeleting }: Props) => {
+export const Issue = ({ issue, onEdit, onDelete, isDeleting }: IssueProps) => {
   return (
     <Item variant="outline">
       <ItemMedia variant="icon">

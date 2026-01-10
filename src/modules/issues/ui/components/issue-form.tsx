@@ -18,7 +18,7 @@ import {
   updateIssueSchema,
 } from "../../schemas/issue.schema";
 
-interface Props {
+interface IssueFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (data: CreateIssue) => Promise<void>;
@@ -37,7 +37,7 @@ export const IssueForm = ({
   onSubmit,
   isLoading,
   issue,
-}: Props) => {
+}: IssueFormProps) => {
   const form = useForm({
     defaultValues: {
       title: issue?.title ?? "",

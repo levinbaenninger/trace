@@ -5,7 +5,7 @@ import { useQuery } from "convex/react";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { api } from "../../convex/_generated/api";
 
-interface Props {
+interface UserMultiSelectProps {
   value: string[];
   onChange: (value: string[]) => void;
   disabled?: boolean;
@@ -17,7 +17,7 @@ export const UserMultiSelect = ({
   onChange,
   disabled,
   placeholder = "Benutzer auswählen...",
-}: Props) => {
+}: UserMultiSelectProps) => {
   const users = useQuery(api.users.list.default);
 
   const userOptions =

@@ -1,11 +1,11 @@
 import { Header } from "@/components/header";
 import { Navigation } from "@/components/navigation";
 
-interface Props {
+interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
-const DashboardLayout = ({ children }: Props) => {
+const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />

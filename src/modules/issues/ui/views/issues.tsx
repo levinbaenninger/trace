@@ -49,11 +49,11 @@ import { Issue } from "../components/issue";
 import { IssueForm } from "../components/issue-form";
 import { IssueListEmpty } from "../components/issue-list-empty";
 
-interface Props {
+interface IssuesProps {
   preloadedIssues: Preloaded<typeof api.issues.list.default>;
 }
 
-export const Issues = ({ preloadedIssues }: Props) => {
+export const Issues = ({ preloadedIssues }: IssuesProps) => {
   const issues = usePreloadedQuery(preloadedIssues);
   const createIssue = useMutation(api.issues.create.default);
   const updateIssue = useMutation(api.issues.update.default);

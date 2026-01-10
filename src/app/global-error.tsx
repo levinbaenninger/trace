@@ -2,12 +2,12 @@
 
 import { ErrorPage } from "@/components/error-page";
 
-interface GlobalProps {
+interface GlobalErrorPageProps {
   error: Error & { digest?: string };
   reset: () => void;
 }
 
-const GlobalError = ({ error, reset }: GlobalProps) => {
+const GlobalErrorPage = ({ error, reset }: GlobalErrorPageProps) => {
   return (
     <html lang="de-CH">
       <body className="dark antialiased">
@@ -17,4 +17,4 @@ const GlobalError = ({ error, reset }: GlobalProps) => {
   );
 };
 
-export default GlobalError;
+export default GlobalErrorPage;

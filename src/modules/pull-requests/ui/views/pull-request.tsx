@@ -32,11 +32,11 @@ import type { MergePullRequestErrors } from "../../../../../convex/pullRequests/
 import { getMergePullRequestErrorMessage } from "../../errors";
 import { MergeDialog } from "../components/merge-dialog";
 
-interface Props {
+interface PullRequestProps {
   preloadedPullRequest: Preloaded<typeof api.pullRequests.get.default>;
 }
 
-export const PullRequest = ({ preloadedPullRequest }: Props) => {
+export const PullRequest = ({ preloadedPullRequest }: PullRequestProps) => {
   const pullRequest = usePreloadedQuery(preloadedPullRequest);
   const mergePullRequest = useMutation(api.pullRequests.merge.default);
 
