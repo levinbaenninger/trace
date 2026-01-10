@@ -1,4 +1,4 @@
-import { CircleDot, GitMerge, GitPullRequest } from "lucide-react";
+import { CircleDot, GitCommit, GitPullRequest } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { WorkflowStep } from "./workflow-step";
@@ -27,7 +27,7 @@ export const Workflow = () => {
 
           <WorkflowStep
             description="Commits sind die tatsächlichen Fortschritte, die wir gemacht haben. Sie sind die Grundlage für alles andere. Ohne Commits gäbe es keine Trace."
-            icon={GitMerge}
+            icon={GitCommit}
             step="3"
             title="Commits"
           />
