@@ -18,26 +18,24 @@ export const ErrorCard = ({
   reset,
 }: Props) => {
   return (
-    <div className="container mx-auto p-4 max-w-4xl">
-      <Card>
-        <CardHeader>
-          <CardTitle>{title}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Alert variant="destructive">
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Fehler</AlertTitle>
-            <AlertDescription className="flex items-center justify-between">
-              <span>{message}</span>
-              {reset && (
-                <Button onClick={reset} size="sm" variant="outline">
-                  Erneut versuchen
-                </Button>
-              )}
-            </AlertDescription>
-          </Alert>
-        </CardContent>
-      </Card>
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Fehler</AlertTitle>
+          <AlertDescription className="flex items-center justify-between">
+            <span>{message}</span>
+            {reset && (
+              <Button onClick={reset} size="sm" variant="outline">
+                Erneut versuchen
+              </Button>
+            )}
+          </AlertDescription>
+        </Alert>
+      </CardContent>
+    </Card>
   );
 };

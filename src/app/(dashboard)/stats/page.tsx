@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { preloadQuery } from "convex/nextjs";
 import { ErrorBoundary } from "react-error-boundary";
 import { getToken } from "@/lib/auth";
-import { Stats, StatsError } from "@/modules/stats/ui/views/stats-view";
+import { Stats, StatsError } from "@/modules/stats/ui/views/stats";
 import { api } from "../../../../convex/_generated/api";
 
 const StatsPage = async () => {
