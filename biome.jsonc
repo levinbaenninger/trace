@@ -1,18 +1,11 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "extends": ["ultracite/core", "ultracite/react", "ultracite/next"],
+  "extends": [
+    "ultracite/biome/core",
+    "ultracite/biome/react",
+    "ultracite/biome/next"
+  ],
   "linter": {
-    "rules": {
-      "correctness": {
-        "noChildrenProp": "off"
-      }
-    }
-  },
-  "files": {
-    "includes": [
-      "src/**/*.{ts,tsx,js,jsx,json,jsonc,css,scss,md,mdx}",
-      "!src/components/ui/**/*.tsx",
-      "!src/hooks/use-mobile.ts"
-    ]
+    "includes": ["!src/components/ui/**", "!src/hooks/use-mobile.ts"]
   }
 }
