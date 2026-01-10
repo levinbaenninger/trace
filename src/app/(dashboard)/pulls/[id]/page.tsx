@@ -1,6 +1,7 @@
 import { RedirectToSignIn } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { preloadQuery } from "convex/nextjs";
+
 import { getToken } from "@/lib/auth";
 import { PullRequest } from "@/modules/pull-requests/ui/views/pull-request";
 import { api } from "../../../../../convex/_generated/api";
