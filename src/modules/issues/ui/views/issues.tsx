@@ -26,13 +26,9 @@ import {
 } from "@/components/ui/empty";
 import { Item, ItemActions, ItemContent } from "@/components/ui/item";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { useConfirm } from "@/hooks/use-confirm";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
 import { parseError } from "@/utils/error/parse";
 import { api } from "../../../../../convex/_generated/api";
 import type { Doc, Id } from "../../../../../convex/_generated/dataModel";
@@ -72,31 +68,14 @@ const IssuesCard = ({
           konkreten Problemen.
         </CardDescription>
         <CardAction>
-          {!isMobile ? (
-            <Button
-              disabled={actionsDisabled}
-              onClick={onCreateClick}
-              size="sm"
-            >
-              <Plus />
-              Neues Issue erstellen
-            </Button>
-          ) : (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  disabled={actionsDisabled}
-                  onClick={onCreateClick}
-                  size="icon-sm"
-                >
-                  <Plus />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Neues Issue erstellen</p>
-              </TooltipContent>
-            </Tooltip>
-          )}
+          <Button
+            disabled={actionsDisabled}
+            onClick={onCreateClick}
+            size={isMobile ? "icon-sm" : "sm"}
+          >
+            <Plus />
+            <span className="hidden md:inline">Neues Issue erstellen</span>
+          </Button>
         </CardAction>
       </CardHeader>
       <CardContent className="space-y-4">{children}</CardContent>
@@ -234,11 +213,7 @@ export const IssuesLoading = () => {
         <Skeleton className="h-6 w-32" />
         <Skeleton className="h-4 w-1/2" />
         <CardAction>
-          {!isMobile ? (
-            <Skeleton className="h-9 w-24" />
-          ) : (
-            <Skeleton className="size-9" />
-          )}
+          <Skeleton className={cn(isMobile ? "size-8" : "h-8 w-24")} />
         </CardAction>
       </CardHeader>
       <CardContent className="space-y-4">

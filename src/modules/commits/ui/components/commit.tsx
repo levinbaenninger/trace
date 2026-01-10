@@ -30,7 +30,7 @@ export const Commit = ({ commit }: CommitProps) => {
         <Button asChild size="sm" variant="outline">
           <Link href={`/pulls/${commit.pullRequestId}`}>
             <EyeIcon />
-            Pull Request ansehen
+            <span className="hidden sm:inline">Pull Request ansehen</span>
           </Link>
         </Button>
       </ItemActions>
