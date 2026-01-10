@@ -2,9 +2,11 @@
 
 import type { Preloaded } from "convex/react";
 import { useMutation, usePreloadedQuery } from "convex/react";
-import { AlertCircle, Plus } from "lucide-react";
+import { AlertCircle, AlertCircleIcon, Plus } from "lucide-react";
+import type { ReactNode } from "react";
 import { useState } from "react";
 import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -47,7 +49,27 @@ import {
 import type { CreateIssue, UpdateIssue } from "../../schemas/issue.schema";
 import { Issue } from "../components/issue";
 import { IssueForm } from "../components/issue-form";
-import { IssueListEmpty } from "../components/issue-list-empty";
+
+interface IssuesCardProps {
+  actionButton?: ReactNode;
+  children: ReactNode;
+}
+
+const IssuesCard = ({ actionButton, children }: IssuesCardProps) => {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Issues</CardTitle>
+        <CardDescription>
+          Alles, was uns im Basislehrjahr beschäftigt hat, von Modulen bis zu
+          konkreten Problemen.
+        </CardDescription>
+        {actionButton && <CardAction>{actionButton}</CardAction>}
+      </CardHeader>
+      <CardContent className="space-y-4">{children}</CardContent>
+    </Card>
+  );
+};
 
 interface IssuesProps {
   preloadedIssues: Preloaded<typeof api.issues.list.default>;
@@ -127,52 +149,42 @@ export const Issues = ({ preloadedIssues }: IssuesProps) => {
   const isMobile = useIsMobile();
   const isEmpty = issues.length === 0;
 
+  const actionButton = !isMobile ? (
+    <Button onClick={() => setIsFormOpen(true)} size="sm">
+      <Plus />
+      Neues Issue erstellen
+    </Button>
+  ) : (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button onClick={() => setIsFormOpen(true)} size="icon-sm">
+          <Plus />
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>Neues Issue erstellen</p>
+      </TooltipContent>
+    </Tooltip>
+  );
+
   return (
     <>
       <ConfirmDeleteDialog />
-      <Card>
-        <CardHeader>
-          <CardTitle>Issues</CardTitle>
-          <CardDescription>
-            Alles, was uns im Basislehrjahr beschäftigt hat, von Modulen bis zu
-            konkreten Problemen.
-          </CardDescription>
-          <CardAction>
-            {!isMobile ? (
-              <Button onClick={() => setIsFormOpen(true)} size="sm">
-                <Plus />
-                Neues Issue erstellen
-              </Button>
-            ) : (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button onClick={() => setIsFormOpen(true)} size="icon-sm">
-                    <Plus />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Neues Issue erstellen</p>
-                </TooltipContent>
-              </Tooltip>
-            )}
-          </CardAction>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {isEmpty && <IssueListEmpty />}
+      <IssuesCard actionButton={actionButton}>
+        {isEmpty && <IssuesEmpty />}
 
-          <div className="space-y-2">
-            {issues.map((issue) => (
-              <Issue
-                isDeleting={deletingId === issue._id}
-                issue={issue}
-                key={issue._id}
-                onDelete={handleDelete}
-                onEdit={handleEdit}
-              />
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+        <div className="space-y-2">
+          {issues.map((issue) => (
+            <Issue
+              isDeleting={deletingId === issue._id}
+              issue={issue}
+              key={issue._id}
+              onDelete={handleDelete}
+              onEdit={handleEdit}
+            />
+          ))}
+        </div>
+      </IssuesCard>
 
       <IssueForm
         isLoading={isCreating || isUpdating}
@@ -182,6 +194,20 @@ export const Issues = ({ preloadedIssues }: IssuesProps) => {
         open={isFormOpen}
       />
     </>
+  );
+};
+
+const IssuesEmpty = () => {
+  return (
+    <Empty>
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <AlertCircleIcon />
+        </EmptyMedia>
+        <EmptyTitle>Noch keine Issues</EmptyTitle>
+        <EmptyDescription>Erstelle ein Issue, um zu beginnen.</EmptyDescription>
+      </EmptyHeader>
+    </Empty>
   );
 };
 
@@ -229,52 +255,42 @@ interface IssuesErrorProps {
 export const IssuesError = ({ reset }: IssuesErrorProps) => {
   const isMobile = useIsMobile();
 
+  const actionButton = !isMobile ? (
+    <Button disabled size="sm">
+      <Plus />
+      Neues Issue erstellen
+    </Button>
+  ) : (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button disabled size="icon-sm">
+          <Plus />
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>Neues Issue erstellen</p>
+      </TooltipContent>
+    </Tooltip>
+  );
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Issues</CardTitle>
-        <CardDescription>
-          Alles, was uns im Basislehrjahr beschäftigt hat, von Modulen bis zu
-          konkreten Problemen.
-        </CardDescription>
-        <CardAction>
-          {!isMobile ? (
-            <Button disabled size="sm">
-              <Plus />
-              Neues Issue erstellen
-            </Button>
-          ) : (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button disabled size="icon-sm">
-                  <Plus />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Neues Issue erstellen</p>
-              </TooltipContent>
-            </Tooltip>
-          )}
-        </CardAction>
-      </CardHeader>
-      <CardContent>
-        <Empty>
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <AlertCircle />
-            </EmptyMedia>
-            <EmptyTitle>Fehler beim Laden</EmptyTitle>
-            <EmptyDescription>
-              Die Issues konnten nicht geladen werden. Bitte versuche es erneut.
-            </EmptyDescription>
-          </EmptyHeader>
-          <EmptyContent>
-            <Button onClick={reset} variant="outline">
-              Erneut versuchen
-            </Button>
-          </EmptyContent>
-        </Empty>
-      </CardContent>
-    </Card>
+    <IssuesCard actionButton={actionButton}>
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <AlertCircle />
+          </EmptyMedia>
+          <EmptyTitle>Fehler beim Laden</EmptyTitle>
+          <EmptyDescription>
+            Die Issues konnten nicht geladen werden. Bitte versuche es erneut.
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <Button onClick={reset} variant="outline">
+            Erneut versuchen
+          </Button>
+        </EmptyContent>
+      </Empty>
+    </IssuesCard>
   );
 };

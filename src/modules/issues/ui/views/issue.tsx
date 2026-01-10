@@ -3,6 +3,7 @@
 import type { Preloaded } from "convex/react";
 import { usePreloadedQuery } from "convex/react";
 import { AlertCircle, Calendar } from "lucide-react";
+import type { ReactNode } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,6 +18,22 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { User, UserBadge } from "@/components/user-display";
 import { api } from "../../../../../convex/_generated/api";
+
+interface IssueCardProps {
+  title?: string;
+  children: ReactNode;
+}
+
+const IssueCard = ({ title = "Issue", children }: IssueCardProps) => {
+  return (
+    <Card className="w-full">
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6">{children}</CardContent>
+    </Card>
+  );
+};
 
 interface IssueProps {
   preloadedIssue: Preloaded<typeof api.issues.get.default>;
@@ -104,28 +121,23 @@ interface IssueErrorProps {
 
 export const IssueError = ({ reset }: IssueErrorProps) => {
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle>Issue</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Empty>
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <AlertCircle />
-            </EmptyMedia>
-            <EmptyTitle>Fehler beim Laden</EmptyTitle>
-            <EmptyDescription>
-              Das Issue konnte nicht geladen werden. Bitte versuche es erneut.
-            </EmptyDescription>
-          </EmptyHeader>
-          <EmptyContent>
-            <Button onClick={reset} variant="outline">
-              Erneut versuchen
-            </Button>
-          </EmptyContent>
-        </Empty>
-      </CardContent>
-    </Card>
+    <IssueCard>
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <AlertCircle />
+          </EmptyMedia>
+          <EmptyTitle>Fehler beim Laden</EmptyTitle>
+          <EmptyDescription>
+            Das Issue konnte nicht geladen werden. Bitte versuche es erneut.
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <Button onClick={reset} variant="outline">
+            Erneut versuchen
+          </Button>
+        </EmptyContent>
+      </Empty>
+    </IssueCard>
   );
 };

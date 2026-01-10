@@ -2,7 +2,8 @@
 
 import type { Preloaded } from "convex/react";
 import { usePreloadedQuery } from "convex/react";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, AlertCircleIcon } from "lucide-react";
+import type { ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -24,7 +25,25 @@ import { Item, ItemActions, ItemContent } from "@/components/ui/item";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "../../../../../convex/_generated/api";
 import { Commit } from "../components/commit";
-import { CommitListEmpty } from "../components/commit-list-empty";
+
+interface CommitsCardProps {
+  children: ReactNode;
+}
+
+const CommitsCard = ({ children }: CommitsCardProps) => {
+  return (
+    <Card className="w-full">
+      <CardHeader>
+        <CardTitle>Commits</CardTitle>
+        <CardDescription>
+          Eine zeitliche Übersicht über alles, was wir erfolgreich abgeschlossen
+          haben.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">{children}</CardContent>
+    </Card>
+  );
+};
 
 interface CommitsProps {
   preloadedCommits: Preloaded<typeof api.commits.list.default>;
@@ -36,24 +55,31 @@ export const Commits = ({ preloadedCommits }: CommitsProps) => {
   const isEmpty = commits.length === 0;
 
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle>Commits</CardTitle>
-        <CardDescription>
-          Eine zeitliche Übersicht über alles, was wir erfolgreich abgeschlossen
-          haben.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {isEmpty && <CommitListEmpty />}
+    <CommitsCard>
+      {isEmpty && <CommitsEmpty />}
 
-        <div className="space-y-2">
-          {commits.map((commit) => (
-            <Commit commit={commit} key={commit._id} />
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+      <div className="space-y-2">
+        {commits.map((commit) => (
+          <Commit commit={commit} key={commit._id} />
+        ))}
+      </div>
+    </CommitsCard>
+  );
+};
+
+const CommitsEmpty = () => {
+  return (
+    <Empty>
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <AlertCircleIcon />
+        </EmptyMedia>
+        <EmptyTitle>Noch keine Commits</EmptyTitle>
+        <EmptyDescription>
+          Commits werden erstellt, wenn Pull Requests merged werden.
+        </EmptyDescription>
+      </EmptyHeader>
+    </Empty>
   );
 };
 
@@ -91,33 +117,23 @@ interface CommitsErrorProps {
 
 export const CommitsError = ({ reset }: CommitsErrorProps) => {
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle>Commits</CardTitle>
-        <CardDescription>
-          Eine zeitliche Übersicht über alles, was wir erfolgreich abgeschlossen
-          haben.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Empty>
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <AlertCircle />
-            </EmptyMedia>
-            <EmptyTitle>Fehler beim Laden</EmptyTitle>
-            <EmptyDescription>
-              Die Commits konnten nicht geladen werden. Bitte versuche es
-              erneut.
-            </EmptyDescription>
-          </EmptyHeader>
-          <EmptyContent>
-            <Button onClick={reset} variant="outline">
-              Erneut versuchen
-            </Button>
-          </EmptyContent>
-        </Empty>
-      </CardContent>
-    </Card>
+    <CommitsCard>
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <AlertCircle />
+          </EmptyMedia>
+          <EmptyTitle>Fehler beim Laden</EmptyTitle>
+          <EmptyDescription>
+            Die Commits konnten nicht geladen werden. Bitte versuche es erneut.
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <Button onClick={reset} variant="outline">
+            Erneut versuchen
+          </Button>
+        </EmptyContent>
+      </Empty>
+    </CommitsCard>
   );
 };

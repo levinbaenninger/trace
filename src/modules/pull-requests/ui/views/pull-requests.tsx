@@ -2,9 +2,11 @@
 
 import type { Preloaded } from "convex/react";
 import { useMutation, usePreloadedQuery } from "convex/react";
-import { AlertCircle, Plus } from "lucide-react";
+import { AlertCircle, AlertCircleIcon, Plus } from "lucide-react";
+import type { ReactNode } from "react";
 import { useState } from "react";
 import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -50,7 +52,29 @@ import type {
 } from "../../schemas/pull-request.schema";
 import { PullRequest } from "../components/pull-request";
 import { PullRequestForm } from "../components/pull-request-form";
-import { PullRequestsEmpty } from "../components/pull-requests-empty";
+
+interface PullRequestsCardProps {
+  actionButton?: ReactNode;
+  children: ReactNode;
+}
+
+const PullRequestsCard = ({
+  actionButton,
+  children,
+}: PullRequestsCardProps) => {
+  return (
+    <Card className="w-full">
+      <CardHeader>
+        <CardTitle>Pull Requests</CardTitle>
+        <CardDescription>
+          Der Weg von einer Idee oder einem Problem hin zu einer Lösung.
+        </CardDescription>
+        {actionButton && <CardAction>{actionButton}</CardAction>}
+      </CardHeader>
+      <CardContent className="space-y-4">{children}</CardContent>
+    </Card>
+  );
+};
 
 interface PullRequestsProps {
   preloadedPullRequests: Preloaded<typeof api.pullRequests.list.default>;
@@ -138,51 +162,42 @@ export const PullRequests = ({ preloadedPullRequests }: PullRequestsProps) => {
   const isMobile = useIsMobile();
   const isEmpty = pullRequests.length === 0;
 
+  const actionButton = !isMobile ? (
+    <Button onClick={() => setIsFormOpen(true)} size="sm">
+      <Plus className="h-4 w-4" />
+      Neuen Pull Request erstellen
+    </Button>
+  ) : (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button onClick={() => setIsFormOpen(true)} size="icon-sm">
+          <Plus className="h-4 w-4" />
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>Neuen Pull Request erstellen</p>
+      </TooltipContent>
+    </Tooltip>
+  );
+
   return (
     <>
       <ConfirmDialog />
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>Pull Requests</CardTitle>
-          <CardDescription>
-            Der Weg von einer Idee oder einem Problem hin zu einer Lösung.
-          </CardDescription>
-          <CardAction>
-            {!isMobile ? (
-              <Button onClick={() => setIsFormOpen(true)} size="sm">
-                <Plus className="h-4 w-4" />
-                Neuen Pull Request erstellen
-              </Button>
-            ) : (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button onClick={() => setIsFormOpen(true)} size="icon-sm">
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Neuen Pull Request erstellen</p>
-                </TooltipContent>
-              </Tooltip>
-            )}
-          </CardAction>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {isEmpty && <PullRequestsEmpty />}
+      <PullRequestsCard actionButton={actionButton}>
+        {isEmpty && <PullRequestsEmpty />}
 
-          <div className="space-y-2">
-            {pullRequests.map((pr) => (
-              <PullRequest
-                isDeleting={deletingId === pr._id}
-                key={pr._id}
-                onDelete={handleDelete}
-                onEdit={handleEdit}
-                pullRequest={pr}
-              />
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+        <div className="space-y-2">
+          {pullRequests.map((pr) => (
+            <PullRequest
+              isDeleting={deletingId === pr._id}
+              key={pr._id}
+              onDelete={handleDelete}
+              onEdit={handleEdit}
+              pullRequest={pr}
+            />
+          ))}
+        </div>
+      </PullRequestsCard>
 
       <PullRequestForm
         isLoading={isCreating || isUpdating}
@@ -192,6 +207,22 @@ export const PullRequests = ({ preloadedPullRequests }: PullRequestsProps) => {
         pullRequest={editingPR ?? undefined}
       />
     </>
+  );
+};
+
+const PullRequestsEmpty = () => {
+  return (
+    <Empty>
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <AlertCircleIcon />
+        </EmptyMedia>
+        <EmptyTitle>Noch keine Pull Requests</EmptyTitle>
+        <EmptyDescription>
+          Erstelle ein Pull Request, um zu beginnen.
+        </EmptyDescription>
+      </EmptyHeader>
+    </Empty>
   );
 };
 
@@ -239,52 +270,43 @@ interface PullRequestsErrorProps {
 export const PullRequestsError = ({ reset }: PullRequestsErrorProps) => {
   const isMobile = useIsMobile();
 
+  const actionButton = !isMobile ? (
+    <Button disabled size="sm">
+      <Plus className="h-4 w-4" />
+      Neuen Pull Request erstellen
+    </Button>
+  ) : (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button disabled size="icon-sm">
+          <Plus className="h-4 w-4" />
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>Neuen Pull Request erstellen</p>
+      </TooltipContent>
+    </Tooltip>
+  );
+
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle>Pull Requests</CardTitle>
-        <CardDescription>
-          Der Weg von einer Idee oder einem Problem hin zu einer Lösung.
-        </CardDescription>
-        <CardAction>
-          {!isMobile ? (
-            <Button disabled size="sm">
-              <Plus className="h-4 w-4" />
-              Neuen Pull Request erstellen
-            </Button>
-          ) : (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button disabled size="icon-sm">
-                  <Plus className="h-4 w-4" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Neuen Pull Request erstellen</p>
-              </TooltipContent>
-            </Tooltip>
-          )}
-        </CardAction>
-      </CardHeader>
-      <CardContent>
-        <Empty>
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <AlertCircle />
-            </EmptyMedia>
-            <EmptyTitle>Fehler beim Laden</EmptyTitle>
-            <EmptyDescription>
-              Die Pull Requests konnten nicht geladen werden. Bitte versuche es
-              erneut.
-            </EmptyDescription>
-          </EmptyHeader>
-          <EmptyContent>
-            <Button onClick={reset} variant="outline">
-              Erneut versuchen
-            </Button>
-          </EmptyContent>
-        </Empty>
-      </CardContent>
-    </Card>
+    <PullRequestsCard actionButton={actionButton}>
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <AlertCircle />
+          </EmptyMedia>
+          <EmptyTitle>Fehler beim Laden</EmptyTitle>
+          <EmptyDescription>
+            Die Pull Requests konnten nicht geladen werden. Bitte versuche es
+            erneut.
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <Button onClick={reset} variant="outline">
+            Erneut versuchen
+          </Button>
+        </EmptyContent>
+      </Empty>
+    </PullRequestsCard>
   );
 };

@@ -3,6 +3,7 @@
 import type { Preloaded } from "convex/react";
 import { useMutation, usePreloadedQuery } from "convex/react";
 import { AlertCircle, Calendar, GitMerge } from "lucide-react";
+import type { ReactNode } from "react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
@@ -31,6 +32,25 @@ import { api } from "../../../../../convex/_generated/api";
 import type { MergePullRequestErrors } from "../../../../../convex/pullRequests/_lib/errors";
 import { getMergePullRequestErrorMessage } from "../../errors";
 import { MergeDialog } from "../components/merge-dialog";
+
+interface PullRequestCardProps {
+  title?: string;
+  children: ReactNode;
+}
+
+const PullRequestCard = ({
+  title = "Pull Request",
+  children,
+}: PullRequestCardProps) => {
+  return (
+    <Card className="w-full">
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6">{children}</CardContent>
+    </Card>
+  );
+};
 
 interface PullRequestProps {
   preloadedPullRequest: Preloaded<typeof api.pullRequests.get.default>;
@@ -184,29 +204,24 @@ interface PullRequestErrorProps {
 
 export const PullRequestError = ({ reset }: PullRequestErrorProps) => {
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle>Pull Request</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Empty>
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <AlertCircle />
-            </EmptyMedia>
-            <EmptyTitle>Fehler beim Laden</EmptyTitle>
-            <EmptyDescription>
-              Der Pull Request konnte nicht geladen werden. Bitte versuche es
-              erneut.
-            </EmptyDescription>
-          </EmptyHeader>
-          <EmptyContent>
-            <Button onClick={reset} variant="outline">
-              Erneut versuchen
-            </Button>
-          </EmptyContent>
-        </Empty>
-      </CardContent>
-    </Card>
+    <PullRequestCard>
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <AlertCircle />
+          </EmptyMedia>
+          <EmptyTitle>Fehler beim Laden</EmptyTitle>
+          <EmptyDescription>
+            Der Pull Request konnte nicht geladen werden. Bitte versuche es
+            erneut.
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <Button onClick={reset} variant="outline">
+            Erneut versuchen
+          </Button>
+        </EmptyContent>
+      </Empty>
+    </PullRequestCard>
   );
 };
