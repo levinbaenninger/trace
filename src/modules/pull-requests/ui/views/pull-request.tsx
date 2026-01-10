@@ -96,7 +96,7 @@ export const PullRequest = ({
               <div className="flex items-center gap-4 text-sm text-muted-foreground">
                 <div className="flex items-center gap-1">
                   <Calendar className="h-4 w-4" />
-                  <span>{Intl.DateTimeFormat().format(createdAt)}</span>
+                  <span>{Intl.DateTimeFormat("de-CH").format(createdAt)}</span>
                 </div>
                 <User showAvatar userId={pullRequest.authorId} users={users} />
               </div>
