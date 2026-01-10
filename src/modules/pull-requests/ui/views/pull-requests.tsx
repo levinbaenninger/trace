@@ -54,14 +54,18 @@ import { PullRequest } from "../components/pull-request";
 import { PullRequestForm } from "../components/pull-request-form";
 
 interface PullRequestsCardProps {
-  actionButton?: ReactNode;
+  actionsDisabled?: boolean;
+  onCreateClick?: () => void;
   children: ReactNode;
 }
 
 const PullRequestsCard = ({
-  actionButton,
+  actionsDisabled = false,
+  onCreateClick,
   children,
 }: PullRequestsCardProps) => {
+  const isMobile = useIsMobile();
+
   return (
     <Card className="w-full">
       <CardHeader>
@@ -69,7 +73,33 @@ const PullRequestsCard = ({
         <CardDescription>
           Der Weg von einer Idee oder einem Problem hin zu einer Lösung.
         </CardDescription>
-        {actionButton && <CardAction>{actionButton}</CardAction>}
+        <CardAction>
+          {!isMobile ? (
+            <Button
+              disabled={actionsDisabled}
+              onClick={onCreateClick}
+              size="sm"
+            >
+              <Plus className="h-4 w-4" />
+              Neuen Pull Request erstellen
+            </Button>
+          ) : (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  disabled={actionsDisabled}
+                  onClick={onCreateClick}
+                  size="icon-sm"
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Neuen Pull Request erstellen</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
+        </CardAction>
       </CardHeader>
       <CardContent className="space-y-4">{children}</CardContent>
     </Card>
@@ -159,31 +189,12 @@ export const PullRequests = ({ preloadedPullRequests }: PullRequestsProps) => {
     setEditingPR(null);
   };
 
-  const isMobile = useIsMobile();
   const isEmpty = pullRequests.length === 0;
-
-  const actionButton = !isMobile ? (
-    <Button onClick={() => setIsFormOpen(true)} size="sm">
-      <Plus className="h-4 w-4" />
-      Neuen Pull Request erstellen
-    </Button>
-  ) : (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Button onClick={() => setIsFormOpen(true)} size="icon-sm">
-          <Plus className="h-4 w-4" />
-        </Button>
-      </TooltipTrigger>
-      <TooltipContent>
-        <p>Neuen Pull Request erstellen</p>
-      </TooltipContent>
-    </Tooltip>
-  );
 
   return (
     <>
       <ConfirmDialog />
-      <PullRequestsCard actionButton={actionButton}>
+      <PullRequestsCard onCreateClick={() => setIsFormOpen(true)}>
         {isEmpty && <PullRequestsEmpty />}
 
         <div className="space-y-2">
@@ -268,28 +279,8 @@ interface PullRequestsErrorProps {
 }
 
 export const PullRequestsError = ({ reset }: PullRequestsErrorProps) => {
-  const isMobile = useIsMobile();
-
-  const actionButton = !isMobile ? (
-    <Button disabled size="sm">
-      <Plus className="h-4 w-4" />
-      Neuen Pull Request erstellen
-    </Button>
-  ) : (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Button disabled size="icon-sm">
-          <Plus className="h-4 w-4" />
-        </Button>
-      </TooltipTrigger>
-      <TooltipContent>
-        <p>Neuen Pull Request erstellen</p>
-      </TooltipContent>
-    </Tooltip>
-  );
-
   return (
-    <PullRequestsCard actionButton={actionButton}>
+    <PullRequestsCard actionsDisabled>
       <Empty>
         <EmptyHeader>
           <EmptyMedia variant="icon">

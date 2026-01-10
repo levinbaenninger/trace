@@ -51,11 +51,18 @@ import { Issue } from "../components/issue";
 import { IssueForm } from "../components/issue-form";
 
 interface IssuesCardProps {
-  actionButton?: ReactNode;
+  actionsDisabled?: boolean;
+  onCreateClick?: () => void;
   children: ReactNode;
 }
 
-const IssuesCard = ({ actionButton, children }: IssuesCardProps) => {
+const IssuesCard = ({
+  actionsDisabled = false,
+  onCreateClick,
+  children,
+}: IssuesCardProps) => {
+  const isMobile = useIsMobile();
+
   return (
     <Card>
       <CardHeader>
@@ -64,7 +71,33 @@ const IssuesCard = ({ actionButton, children }: IssuesCardProps) => {
           Alles, was uns im Basislehrjahr beschäftigt hat, von Modulen bis zu
           konkreten Problemen.
         </CardDescription>
-        {actionButton && <CardAction>{actionButton}</CardAction>}
+        <CardAction>
+          {!isMobile ? (
+            <Button
+              disabled={actionsDisabled}
+              onClick={onCreateClick}
+              size="sm"
+            >
+              <Plus />
+              Neues Issue erstellen
+            </Button>
+          ) : (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  disabled={actionsDisabled}
+                  onClick={onCreateClick}
+                  size="icon-sm"
+                >
+                  <Plus />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Neues Issue erstellen</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
+        </CardAction>
       </CardHeader>
       <CardContent className="space-y-4">{children}</CardContent>
     </Card>
@@ -146,31 +179,12 @@ export const Issues = ({ preloadedIssues }: IssuesProps) => {
     setEditingIssue(null);
   };
 
-  const isMobile = useIsMobile();
   const isEmpty = issues.length === 0;
-
-  const actionButton = !isMobile ? (
-    <Button onClick={() => setIsFormOpen(true)} size="sm">
-      <Plus />
-      Neues Issue erstellen
-    </Button>
-  ) : (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Button onClick={() => setIsFormOpen(true)} size="icon-sm">
-          <Plus />
-        </Button>
-      </TooltipTrigger>
-      <TooltipContent>
-        <p>Neues Issue erstellen</p>
-      </TooltipContent>
-    </Tooltip>
-  );
 
   return (
     <>
       <ConfirmDeleteDialog />
-      <IssuesCard actionButton={actionButton}>
+      <IssuesCard onCreateClick={() => setIsFormOpen(true)}>
         {isEmpty && <IssuesEmpty />}
 
         <div className="space-y-2">
@@ -253,28 +267,8 @@ interface IssuesErrorProps {
 }
 
 export const IssuesError = ({ reset }: IssuesErrorProps) => {
-  const isMobile = useIsMobile();
-
-  const actionButton = !isMobile ? (
-    <Button disabled size="sm">
-      <Plus />
-      Neues Issue erstellen
-    </Button>
-  ) : (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Button disabled size="icon-sm">
-          <Plus />
-        </Button>
-      </TooltipTrigger>
-      <TooltipContent>
-        <p>Neues Issue erstellen</p>
-      </TooltipContent>
-    </Tooltip>
-  );
-
   return (
-    <IssuesCard actionButton={actionButton}>
+    <IssuesCard actionsDisabled>
       <Empty>
         <EmptyHeader>
           <EmptyMedia variant="icon">
