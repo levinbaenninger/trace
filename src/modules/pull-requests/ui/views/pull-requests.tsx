@@ -2,10 +2,9 @@
 
 import type { Preloaded } from "convex/react";
 import { useMutation, usePreloadedQuery } from "convex/react";
-import { Plus } from "lucide-react";
+import { AlertCircle, Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { ErrorCard } from "@/components/error-card";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,6 +14,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import { Item, ItemActions, ItemContent } from "@/components/ui/item";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -224,11 +231,60 @@ export const PullRequestsLoading = () => {
   );
 };
 
-export const PullRequestsError = () => {
+interface PullRequestsErrorProps {
+  error: Error & { digest?: string };
+  reset: () => void;
+}
+
+export const PullRequestsError = ({ reset }: PullRequestsErrorProps) => {
+  const isMobile = useIsMobile();
+
   return (
-    <ErrorCard
-      message="Fehler beim Laden der Pull Requests. Bitte versuche es erneut."
-      title="Fehler beim Laden der Pull Requests"
-    />
+    <Card className="w-full">
+      <CardHeader>
+        <CardTitle>Pull Requests</CardTitle>
+        <CardDescription>
+          Der Weg von einer Idee oder einem Problem hin zu einer Lösung.
+        </CardDescription>
+        <CardAction>
+          {!isMobile ? (
+            <Button disabled size="sm">
+              <Plus className="h-4 w-4" />
+              Neuen Pull Request erstellen
+            </Button>
+          ) : (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button disabled size="icon-sm">
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Neuen Pull Request erstellen</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
+        </CardAction>
+      </CardHeader>
+      <CardContent>
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <AlertCircle />
+            </EmptyMedia>
+            <EmptyTitle>Fehler beim Laden</EmptyTitle>
+            <EmptyDescription>
+              Die Pull Requests konnten nicht geladen werden. Bitte versuche es
+              erneut.
+            </EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <Button onClick={reset} variant="outline">
+              Erneut versuchen
+            </Button>
+          </EmptyContent>
+        </Empty>
+      </CardContent>
+    </Card>
   );
 };

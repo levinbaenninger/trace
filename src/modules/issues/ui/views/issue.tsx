@@ -2,10 +2,18 @@
 
 import type { Preloaded } from "convex/react";
 import { usePreloadedQuery } from "convex/react";
-import { Calendar } from "lucide-react";
-import { ErrorCard } from "@/components/error-card";
+import { AlertCircle, Calendar } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
 import { User, UserBadge } from "@/components/user-display";
 import { api } from "../../../../../convex/_generated/api";
@@ -89,11 +97,35 @@ export const IssueLoading = () => {
   );
 };
 
-export const IssueError = () => {
+interface IssueErrorProps {
+  error: Error & { digest?: string };
+  reset: () => void;
+}
+
+export const IssueError = ({ reset }: IssueErrorProps) => {
   return (
-    <ErrorCard
-      message="Fehler beim Laden der Issue-Details. Bitte versuche es erneut."
-      title="Fehler beim Laden der Issue-Details"
-    />
+    <Card className="w-full">
+      <CardHeader>
+        <CardTitle>Issue</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <AlertCircle />
+            </EmptyMedia>
+            <EmptyTitle>Fehler beim Laden</EmptyTitle>
+            <EmptyDescription>
+              Das Issue konnte nicht geladen werden. Bitte versuche es erneut.
+            </EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <Button onClick={reset} variant="outline">
+              Erneut versuchen
+            </Button>
+          </EmptyContent>
+        </Empty>
+      </CardContent>
+    </Card>
   );
 };

@@ -2,10 +2,9 @@
 
 import type { Preloaded } from "convex/react";
 import { useMutation, usePreloadedQuery } from "convex/react";
-import { Plus } from "lucide-react";
+import { AlertCircle, Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { ErrorCard } from "@/components/error-card";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,6 +14,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import { Item, ItemActions, ItemContent } from "@/components/ui/item";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -214,11 +221,60 @@ export const IssuesLoading = () => {
   );
 };
 
-export const IssuesError = () => {
+interface IssuesErrorProps {
+  error: Error & { digest?: string };
+  reset: () => void;
+}
+
+export const IssuesError = ({ reset }: IssuesErrorProps) => {
+  const isMobile = useIsMobile();
+
   return (
-    <ErrorCard
-      message="Fehler beim Laden der Issues. Bitte versuche es erneut."
-      title="Fehler beim Laden der Issues"
-    />
+    <Card>
+      <CardHeader>
+        <CardTitle>Issues</CardTitle>
+        <CardDescription>
+          Alles, was uns im Basislehrjahr beschäftigt hat, von Modulen bis zu
+          konkreten Problemen.
+        </CardDescription>
+        <CardAction>
+          {!isMobile ? (
+            <Button disabled size="sm">
+              <Plus />
+              Neues Issue erstellen
+            </Button>
+          ) : (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button disabled size="icon-sm">
+                  <Plus />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Neues Issue erstellen</p>
+              </TooltipContent>
+            </Tooltip>
+          )}
+        </CardAction>
+      </CardHeader>
+      <CardContent>
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <AlertCircle />
+            </EmptyMedia>
+            <EmptyTitle>Fehler beim Laden</EmptyTitle>
+            <EmptyDescription>
+              Die Issues konnten nicht geladen werden. Bitte versuche es erneut.
+            </EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <Button onClick={reset} variant="outline">
+              Erneut versuchen
+            </Button>
+          </EmptyContent>
+        </Empty>
+      </CardContent>
+    </Card>
   );
 };

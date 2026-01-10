@@ -2,10 +2,9 @@
 
 import type { Preloaded } from "convex/react";
 import { useMutation, usePreloadedQuery } from "convex/react";
-import { Calendar, GitMerge } from "lucide-react";
+import { AlertCircle, Calendar, GitMerge } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { ErrorCard } from "@/components/error-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,6 +14,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { User, UserBadge } from "@/components/user-display";
@@ -170,11 +177,36 @@ export const PullRequestLoading = () => {
   );
 };
 
-export const PullRequestError = () => {
+interface PullRequestErrorProps {
+  error: Error & { digest?: string };
+  reset: () => void;
+}
+
+export const PullRequestError = ({ reset }: PullRequestErrorProps) => {
   return (
-    <ErrorCard
-      message="Fehler beim Laden der Pull Request. Bitte versuche es erneut."
-      title="Fehler beim Laden des Pull Requests"
-    />
+    <Card className="w-full">
+      <CardHeader>
+        <CardTitle>Pull Request</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <AlertCircle />
+            </EmptyMedia>
+            <EmptyTitle>Fehler beim Laden</EmptyTitle>
+            <EmptyDescription>
+              Der Pull Request konnte nicht geladen werden. Bitte versuche es
+              erneut.
+            </EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <Button onClick={reset} variant="outline">
+              Erneut versuchen
+            </Button>
+          </EmptyContent>
+        </Empty>
+      </CardContent>
+    </Card>
   );
 };

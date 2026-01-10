@@ -1,9 +1,8 @@
 import { RedirectToSignIn } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { preloadQuery } from "convex/nextjs";
-import { ErrorBoundary } from "react-error-boundary";
 import { getToken } from "@/lib/auth";
-import { Issue, IssueError } from "@/modules/issues/ui/views/issue";
+import { Issue } from "@/modules/issues/ui/views/issue";
 import { api } from "../../../../../convex/_generated/api";
 import type { Id } from "../../../../../convex/_generated/dataModel";
 
@@ -25,11 +24,7 @@ const IssueDetailPage = async ({ params }: Props) => {
     { token: await getToken() }
   );
 
-  return (
-    <ErrorBoundary fallback={<IssueError />}>
-      <Issue preloadedIssue={preloadedIssue} />
-    </ErrorBoundary>
-  );
+  return <Issue preloadedIssue={preloadedIssue} />;
 };
 
 export default IssueDetailPage;

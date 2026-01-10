@@ -1,16 +1,16 @@
+import { RedirectToSignIn } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { preloadQuery } from "convex/nextjs";
-import { ErrorBoundary } from "react-error-boundary";
 
 import { getToken } from "@/lib/auth";
-import { Commits, CommitsError } from "@/modules/commits/ui/views/commits";
+import { Commits } from "@/modules/commits/ui/views/commits";
 import { api } from "../../../../convex/_generated/api";
 
 const CommitsPage = async () => {
   const { isAuthenticated } = await auth();
 
   if (!isAuthenticated) {
-    return null;
+    return <RedirectToSignIn />;
   }
 
   const preloadedCommits = await preloadQuery(
@@ -19,11 +19,7 @@ const CommitsPage = async () => {
     { token: await getToken() }
   );
 
-  return (
-    <ErrorBoundary fallback={<CommitsError />}>
-      <Commits preloadedCommits={preloadedCommits} />
-    </ErrorBoundary>
-  );
+  return <Commits preloadedCommits={preloadedCommits} />;
 };
 
 export default CommitsPage;

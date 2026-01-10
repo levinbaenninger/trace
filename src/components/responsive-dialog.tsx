@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/drawer";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-interface ResponsiveDialogProps {
+interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   title: string;
@@ -30,7 +30,7 @@ export const ResponsiveDialog = ({
   title,
   description,
   children,
-}: ResponsiveDialogProps) => {
+}: Props) => {
   const isMobile = useIsMobile();
 
   if (isMobile) {

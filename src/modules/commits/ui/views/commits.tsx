@@ -3,7 +3,8 @@
 import type { Preloaded } from "convex/react";
 import { usePreloadedQuery } from "convex/react";
 
-import { ErrorCard } from "@/components/error-card";
+import { AlertCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -11,6 +12,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import { Item, ItemActions, ItemContent } from "@/components/ui/item";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "../../../../../convex/_generated/api";
@@ -75,11 +84,40 @@ export const CommitsLoading = () => {
   );
 };
 
-export const CommitsError = () => {
+interface CommitsErrorProps {
+  error: Error & { digest?: string };
+  reset: () => void;
+}
+
+export const CommitsError = ({ reset }: CommitsErrorProps) => {
   return (
-    <ErrorCard
-      message="Fehler beim Laden der Commits. Bitte versuche es erneut."
-      title="Fehler beim Laden der Commits"
-    />
+    <Card className="w-full">
+      <CardHeader>
+        <CardTitle>Commits</CardTitle>
+        <CardDescription>
+          Eine zeitliche Übersicht über alles, was wir erfolgreich abgeschlossen
+          haben.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <AlertCircle />
+            </EmptyMedia>
+            <EmptyTitle>Fehler beim Laden</EmptyTitle>
+            <EmptyDescription>
+              Die Commits konnten nicht geladen werden. Bitte versuche es
+              erneut.
+            </EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <Button onClick={reset} variant="outline">
+              Erneut versuchen
+            </Button>
+          </EmptyContent>
+        </Empty>
+      </CardContent>
+    </Card>
   );
 };

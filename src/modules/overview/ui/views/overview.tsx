@@ -1,7 +1,16 @@
 "use client";
 
-import { ErrorCard } from "@/components/error-card";
+import { AlertCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Hero } from "../components/hero";
 import { Workflow } from "../components/workflow";
@@ -42,11 +51,33 @@ export const OverviewLoading = () => {
   );
 };
 
-export const OverviewError = () => {
+interface OverviewErrorProps {
+  error: Error & { digest?: string };
+  reset: () => void;
+}
+
+export const OverviewError = ({ reset }: OverviewErrorProps) => {
   return (
-    <ErrorCard
-      message="Fehler beim Laden der Übersicht. Bitte versuche es erneut."
-      title="Fehler beim Laden der Übersicht"
-    />
+    <Card className="w-full">
+      <CardHeader>
+        <Empty>
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <AlertCircle />
+            </EmptyMedia>
+            <EmptyTitle>Fehler beim Laden</EmptyTitle>
+            <EmptyDescription>
+              Die Übersicht konnte nicht geladen werden. Bitte versuche es
+              erneut.
+            </EmptyDescription>
+          </EmptyHeader>
+          <EmptyContent>
+            <Button onClick={reset} variant="outline">
+              Erneut versuchen
+            </Button>
+          </EmptyContent>
+        </Empty>
+      </CardHeader>
+    </Card>
   );
 };
