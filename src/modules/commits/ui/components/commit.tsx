@@ -11,6 +11,7 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item";
+import { useIsMobile } from "@/hooks/use-mobile";
 import type { Doc } from "../../../../../convex/_generated/dataModel";
 
 interface CommitProps {
@@ -18,6 +19,8 @@ interface CommitProps {
 }
 
 export const Commit = ({ commit }: CommitProps) => {
+  const isMobile = useIsMobile();
+
   return (
     <Item variant="outline">
       <ItemMedia variant="icon">
@@ -27,10 +30,10 @@ export const Commit = ({ commit }: CommitProps) => {
         <ItemTitle>{commit.message}</ItemTitle>
       </ItemContent>
       <ItemActions>
-        <Button asChild size="sm" variant="outline">
+        <Button asChild size={isMobile ? "icon-sm" : "sm"} variant="outline">
           <Link href={`/pulls/${commit.pullRequestId}`}>
             <EyeIcon />
-            <span className="hidden sm:inline">Pull Request ansehen</span>
+            <span className="hidden md:inline">Pull Request ansehen</span>
           </Link>
         </Button>
       </ItemActions>
