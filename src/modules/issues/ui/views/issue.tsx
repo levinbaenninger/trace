@@ -3,6 +3,7 @@
 import type { Preloaded } from "convex/react";
 import { usePreloadedQuery } from "convex/react";
 import { AlertCircle, Calendar } from "lucide-react";
+import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 
 import { Badge } from "@/components/ui/badge";
@@ -19,7 +20,10 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { User } from "@/components/user";
 import { UserBadge } from "@/components/user-badge";
+import { parseError } from "@/utils/error/parse";
 import { api } from "../../../../../convex/_generated/api";
+import { GetIssueErrors } from "../../../../../convex/issues/_lib/errors";
+import { getGetIssueErrorMessage } from "../../errors";
 
 interface IssueCardProps {
   title?: string;
@@ -119,10 +123,20 @@ export const IssueLoading = () => {
 };
 
 interface IssueErrorProps {
+  error: Error & { digest?: string };
   reset: () => void;
 }
 
-export const IssueError = ({ reset }: IssueErrorProps) => {
+export const IssueError = ({ error, reset }: IssueErrorProps) => {
+  const parsedError = parseError<GetIssueErrors>(error);
+
+  if (
+    parsedError.code === "ISSUE_NOT_FOUND" ||
+    error.message.includes("ArgumentValidationError")
+  ) {
+    notFound();
+  }
+
   return (
     <IssueCard>
       <Empty>
@@ -132,7 +146,7 @@ export const IssueError = ({ reset }: IssueErrorProps) => {
           </EmptyMedia>
           <EmptyTitle>Fehler beim Laden</EmptyTitle>
           <EmptyDescription>
-            Das Issue konnte nicht geladen werden. Bitte versuche es erneut.
+            {getGetIssueErrorMessage(parsedError)}
           </EmptyDescription>
         </EmptyHeader>
         <EmptyContent>

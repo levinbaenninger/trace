@@ -3,6 +3,7 @@
 import type { Preloaded } from "convex/react";
 import { useMutation, usePreloadedQuery } from "convex/react";
 import { AlertCircle, Calendar, GitMerge } from "lucide-react";
+import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -31,8 +32,14 @@ import { UserBadge } from "@/components/user-badge";
 import { Issue } from "@/modules/issues/ui/components/issue";
 import { parseError } from "@/utils/error/parse";
 import { api } from "../../../../../convex/_generated/api";
-import type { MergePullRequestErrors } from "../../../../../convex/pullRequests/_lib/errors";
-import { getMergePullRequestErrorMessage } from "../../errors";
+import type {
+  GetPullRequestErrors,
+  MergePullRequestErrors,
+} from "../../../../../convex/pullRequests/_lib/errors";
+import {
+  getGetPullRequestErrorMessage,
+  getMergePullRequestErrorMessage,
+} from "../../errors";
 import { MergeDialog } from "../components/merge-dialog";
 
 interface PullRequestCardProps {
@@ -205,10 +212,20 @@ export const PullRequestLoading = () => {
 };
 
 interface PullRequestErrorProps {
+  error: Error & { digest?: string };
   reset: () => void;
 }
 
-export const PullRequestError = ({ reset }: PullRequestErrorProps) => {
+export const PullRequestError = ({ error, reset }: PullRequestErrorProps) => {
+  const parsedError = parseError<GetPullRequestErrors>(error);
+
+  if (
+    parsedError.code === "PULL_REQUEST_NOT_FOUND" ||
+    error.message.includes("ArgumentValidationError")
+  ) {
+    notFound();
+  }
+
   return (
     <PullRequestCard>
       <Empty>
@@ -218,8 +235,7 @@ export const PullRequestError = ({ reset }: PullRequestErrorProps) => {
           </EmptyMedia>
           <EmptyTitle>Fehler beim Laden</EmptyTitle>
           <EmptyDescription>
-            Der Pull Request konnte nicht geladen werden. Bitte versuche es
-            erneut.
+            {getGetPullRequestErrorMessage(parsedError)}
           </EmptyDescription>
         </EmptyHeader>
         <EmptyContent>
