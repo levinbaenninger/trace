@@ -22,18 +22,18 @@ export const UserMultiSelect = ({
 }: UserMultiSelectProps) => {
   const userOptions =
     users?.map((user) => ({
-      label: user.name,
-      value: user.id,
+      label: user.firstName,
+      value: user.clerkId,
     })) ?? [];
 
   return (
     <MultiSelect
-      defaultValue={value}
       disabled={disabled}
       onValueChange={onChange}
       options={userOptions}
       placeholder={placeholder}
       searchable
+      value={value}
     />
   );
 };

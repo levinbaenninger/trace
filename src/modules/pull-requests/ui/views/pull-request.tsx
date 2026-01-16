@@ -205,7 +205,6 @@ export const PullRequestLoading = () => {
 };
 
 interface PullRequestErrorProps {
-  error: Error & { digest?: string };
   reset: () => void;
 }
 

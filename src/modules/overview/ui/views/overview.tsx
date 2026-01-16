@@ -52,7 +52,6 @@ export const OverviewLoading = () => {
 };
 
 interface OverviewErrorProps {
-  error: Error & { digest?: string };
   reset: () => void;
 }
 

@@ -119,7 +119,6 @@ export const IssueLoading = () => {
 };
 
 interface IssueErrorProps {
-  error: Error & { digest?: string };
   reset: () => void;
 }
 

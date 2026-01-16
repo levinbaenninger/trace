@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "mprocs \"bun dev:frontend\" \"bun dev:convex\"",
+    "dev": "mprocs \"bun dev:frontend\" \"bun dev:convex\" \"bun ngrok\"",
     "dev:frontend": "next dev",
     "dev:convex": "convex dev",
+    "ngrok": "ngrok http 3000",
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",

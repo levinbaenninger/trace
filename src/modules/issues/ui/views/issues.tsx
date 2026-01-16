@@ -74,7 +74,9 @@ const IssuesCard = ({
             size={isMobile ? "icon-sm" : "sm"}
           >
             <Plus />
-            <span className="hidden md:inline">Neues Issue erstellen</span>
+            <span className="sr-only md:not-sr-only">
+              Neues Issue erstellen
+            </span>
           </Button>
         </CardAction>
       </CardHeader>
@@ -240,7 +242,6 @@ export const IssuesLoading = () => {
 };
 
 interface IssuesErrorProps {
-  error: Error & { digest?: string };
   reset: () => void;
 }
 

@@ -24,7 +24,7 @@ export const Commit = ({ commit }: CommitProps) => {
   return (
     <Item variant="outline">
       <ItemMedia variant="icon">
-        <GitCommit />
+        <GitCommit aria-label="Commit" />
       </ItemMedia>
       <ItemContent>
         <ItemTitle>{commit.message}</ItemTitle>
@@ -32,8 +32,8 @@ export const Commit = ({ commit }: CommitProps) => {
       <ItemActions>
         <Button asChild size={isMobile ? "icon-sm" : "sm"} variant="outline">
           <Link href={`/pulls/${commit.pullRequestId}`}>
-            <EyeIcon />
-            <span className="hidden md:inline">Pull Request ansehen</span>
+            <EyeIcon aria-hidden="true" />
+            <span className="sr-only md:not-sr-only">Pull Request ansehen</span>
           </Link>
         </Button>
       </ItemActions>

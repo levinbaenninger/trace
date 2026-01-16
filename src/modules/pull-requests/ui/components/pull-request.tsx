@@ -30,9 +30,9 @@ export const PullRequest = ({
     <Item variant="outline">
       <ItemMedia variant="icon">
         {pullRequest.merged ? (
-          <GitMerge className="text-closed" />
+          <GitMerge aria-label="Zusammengeführt" className="text-closed" />
         ) : (
-          <GitPullRequest className="text-open" />
+          <GitPullRequest aria-label="Offen" className="text-open" />
         )}
       </ItemMedia>
       <ItemContent>
@@ -43,22 +43,24 @@ export const PullRequest = ({
       {!pullRequest.merged && (
         <ItemActions>
           <Button
+            aria-label="Pull Request bearbeiten"
             disabled={isDeleting}
             loading={isDeleting}
             onClick={() => onEdit(pullRequest)}
             size="icon"
             variant="outline"
           >
-            <Pencil />
+            <Pencil aria-hidden="true" />
           </Button>
           <Button
+            aria-label="Pull Request löschen"
             disabled={isDeleting}
             loading={isDeleting}
             onClick={() => onDelete(pullRequest._id)}
             size="icon"
             variant="outline"
           >
-            <Trash2 />
+            <Trash2 aria-hidden="true" />
           </Button>
         </ItemActions>
       )}

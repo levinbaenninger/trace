@@ -25,9 +25,9 @@ export const Issue = ({ issue, onEdit, onDelete, isDeleting }: IssueProps) => {
     <Item variant="outline">
       <ItemMedia variant="icon">
         {issue.status === "open" ? (
-          <CircleDot className="text-open" />
+          <CircleDot aria-label="Offen" className="text-open" />
         ) : (
-          <CircleCheck className="text-closed" />
+          <CircleCheck aria-label="Geschlossen" className="text-closed" />
         )}
       </ItemMedia>
       <ItemContent>
@@ -38,24 +38,26 @@ export const Issue = ({ issue, onEdit, onDelete, isDeleting }: IssueProps) => {
       <ItemActions>
         {onEdit && (
           <Button
+            aria-label="Issue bearbeiten"
             disabled={isDeleting}
             loading={isDeleting}
             onClick={() => onEdit(issue)}
             size="icon"
             variant="outline"
           >
-            <Pencil />
+            <Pencil aria-hidden="true" />
           </Button>
         )}
         {onDelete && (
           <Button
+            aria-label="Issue löschen"
             disabled={isDeleting}
             loading={isDeleting}
             onClick={() => onDelete(issue._id)}
             size="icon"
             variant="outline"
           >
-            <Trash2 />
+            <Trash2 aria-hidden="true" />
           </Button>
         )}
       </ItemActions>

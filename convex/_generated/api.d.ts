@@ -26,7 +26,11 @@ import type * as pullRequests_list from "../pullRequests/list.js";
 import type * as pullRequests_merge from "../pullRequests/merge.js";
 import type * as pullRequests_remove from "../pullRequests/remove.js";
 import type * as pullRequests_update from "../pullRequests/update.js";
+import type * as users__lib_errors from "../users/_lib/errors.js";
+import type * as users_create from "../users/create.js";
 import type * as users_list from "../users/list.js";
+import type * as users_remove from "../users/remove.js";
+import type * as users_update from "../users/update.js";
 
 import type {
   ApiFromModules,
@@ -53,7 +57,11 @@ declare const fullApi: ApiFromModules<{
   "pullRequests/merge": typeof pullRequests_merge;
   "pullRequests/remove": typeof pullRequests_remove;
   "pullRequests/update": typeof pullRequests_update;
+  "users/_lib/errors": typeof users__lib_errors;
+  "users/create": typeof users_create;
   "users/list": typeof users_list;
+  "users/remove": typeof users_remove;
+  "users/update": typeof users_update;
 }>;
 
 /**

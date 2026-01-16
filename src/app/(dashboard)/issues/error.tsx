@@ -3,12 +3,11 @@
 import { IssuesError } from "@/modules/issues/ui/views/issues";
 
 interface IssuesErrorPageProps {
-  error: Error & { digest?: string };
   reset: () => void;
 }
 
-const IssuesErrorPage = ({ error, reset }: IssuesErrorPageProps) => {
-  return <IssuesError error={error} reset={reset} />;
+const IssuesErrorPage = ({ reset }: IssuesErrorPageProps) => {
+  return <IssuesError reset={reset} />;
 };
 
 export default IssuesErrorPage;

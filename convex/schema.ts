@@ -27,4 +27,10 @@ export default defineSchema({
     message: v.string(),
     authorId: v.string(),
   }).index("by_pull_request", ["pullRequestId"]),
+
+  users: defineTable({
+    clerkId: v.string(),
+    firstName: v.string(),
+    imageUrl: v.optional(v.string()),
+  }).index("by_clerk_id", ["clerkId"]),
 });

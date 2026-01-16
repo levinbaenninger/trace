@@ -3,12 +3,11 @@
 import { OverviewError } from "@/modules/overview/ui/views/overview";
 
 interface OverviewErrorPageProps {
-  error: Error & { digest?: string };
   reset: () => void;
 }
 
-const OverviewErrorPage = ({ error, reset }: OverviewErrorPageProps) => {
-  return <OverviewError error={error} reset={reset} />;
+const OverviewErrorPage = ({ reset }: OverviewErrorPageProps) => {
+  return <OverviewError reset={reset} />;
 };
 
 export default OverviewErrorPage;

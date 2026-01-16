@@ -76,7 +76,7 @@ const PullRequestsCard = ({
             size={isMobile ? "icon-sm" : "sm"}
           >
             <Plus />
-            <span className="hidden md:inline">
+            <span className="sr-only md:not-sr-only">
               Neuen Pull Request erstellen
             </span>
           </Button>
@@ -257,7 +257,6 @@ export const PullRequestsLoading = () => {
 };
 
 interface PullRequestsErrorProps {
-  error: Error & { digest?: string };
   reset: () => void;
 }
 

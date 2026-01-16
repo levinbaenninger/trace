@@ -12,8 +12,8 @@ interface UserProps {
 }
 
 export const User = ({ userId, showAvatar = false, users }: UserProps) => {
-  const user = users?.find((u) => u.id === userId);
-  const displayName = user?.name || userId.split("|")[1] || userId;
+  const user = users?.find((u) => u.clerkId === userId);
+  const displayName = user?.firstName || userId.split("|")[1] || userId;
 
   if (showAvatar) {
     return (

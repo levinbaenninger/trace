@@ -111,7 +111,6 @@ export const CommitsLoading = () => {
 };
 
 interface CommitsErrorProps {
-  error: Error & { digest?: string };
   reset: () => void;
 }
 
