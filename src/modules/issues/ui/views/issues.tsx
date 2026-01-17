@@ -117,6 +117,8 @@ export const Issues = ({ preloadedIssues, preloadedUsers }: IssuesProps) => {
       } else {
         await createIssue(data);
       }
+
+      return true;
     } catch (error) {
       if (editingIssue) {
         const parsedError = parseError<UpdateIssueErrors>(error);
@@ -125,6 +127,8 @@ export const Issues = ({ preloadedIssues, preloadedUsers }: IssuesProps) => {
         const parsedError = parseError<CreateIssueErrors>(error);
         toast.error(getCreateIssueErrorMessage(parsedError));
       }
+
+      return false;
     } finally {
       setIsSubmitting(false);
     }

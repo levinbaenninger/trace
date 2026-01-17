@@ -32,7 +32,7 @@ import {
 interface PullRequestFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (data: CreatePullRequest | UpdatePullRequest) => Promise<void>;
+  onSubmit: (data: CreatePullRequest | UpdatePullRequest) => Promise<boolean>;
   isLoading?: boolean;
   pullRequest?: Doc<"pullRequests">;
   users: FunctionReturnType<typeof api.users.list.default>;
@@ -72,9 +72,11 @@ export const PullRequestForm = ({
       onChange: pullRequest ? updatePullRequestSchema : createPullRequestSchema,
     },
     onSubmit: async ({ value }) => {
-      await onSubmit(value);
-      onOpenChange(false);
-      form.reset();
+      const success = await onSubmit(value);
+      if (success) {
+        onOpenChange(false);
+        form.reset();
+      }
     },
   });
 

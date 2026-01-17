@@ -16,7 +16,7 @@ export const UserBadge = ({ userId, users }: UserBadgeProps) => {
 
   return (
     <div className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium">
-      <UserIcon className="h-3 w-3" />
+      <UserIcon aria-hidden className="h-3 w-3" />
       {displayName}
     </div>
   );

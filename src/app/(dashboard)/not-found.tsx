@@ -31,7 +31,7 @@ const DashboardNotFoundPage = () => {
         <Empty>
           <EmptyHeader>
             <EmptyMedia variant="icon">
-              <FileQuestion />
+              <FileQuestion aria-hidden="true" />
             </EmptyMedia>
             <EmptyTitle>Nicht gefunden</EmptyTitle>
             <EmptyDescription>

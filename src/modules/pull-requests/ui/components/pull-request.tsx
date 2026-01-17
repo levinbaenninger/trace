@@ -45,7 +45,6 @@ export const PullRequest = ({
           <Button
             aria-label="Pull Request bearbeiten"
             disabled={isDeleting}
-            loading={isDeleting}
             onClick={() => onEdit(pullRequest)}
             size="icon"
             variant="outline"

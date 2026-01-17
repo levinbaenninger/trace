@@ -31,7 +31,7 @@ import {
 interface IssueFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (data: CreateIssue | UpdateIssue) => Promise<void>;
+  onSubmit: (data: CreateIssue | UpdateIssue) => Promise<boolean>;
   isLoading?: boolean;
   issue?: Doc<"issues">;
   users: FunctionReturnType<typeof api.users.list.default>;
@@ -61,9 +61,11 @@ export const IssueForm = ({
       onChange: issue ? updateIssueSchema : createIssueSchema,
     },
     onSubmit: async ({ value }) => {
-      await onSubmit(value);
-      onOpenChange(false);
-      form.reset();
+      const success = await onSubmit(value);
+      if (success) {
+        onOpenChange(false);
+        form.reset();
+      }
     },
   });
 

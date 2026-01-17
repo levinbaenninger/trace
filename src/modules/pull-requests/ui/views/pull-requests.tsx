@@ -129,6 +129,8 @@ export const PullRequests = ({
           issueIds: data.issueIds as Id<"issues">[],
         });
       }
+
+      return true;
     } catch (error) {
       if (editingPR) {
         const parsedError = parseError<UpdatePullRequestErrors>(error);
@@ -137,6 +139,8 @@ export const PullRequests = ({
         const parsedError = parseError<CreatePullRequestErrors>(error);
         toast.error(getCreatePullRequestErrorMessage(parsedError));
       }
+
+      return false;
     } finally {
       setIsSubmitting(false);
     }
