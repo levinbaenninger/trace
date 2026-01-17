@@ -3,7 +3,7 @@
 import type { FunctionReturnType } from "convex/server";
 
 import { MultiSelect } from "@/components/ui/multi-select";
-import type { api } from "../../convex/_generated/api";
+import type { api } from "../../../../../convex/_generated/api";
 
 interface UserMultiSelectProps {
   value: string[];
