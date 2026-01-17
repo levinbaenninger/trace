@@ -26,7 +26,7 @@ export const getUpdatePullRequestErrorMessage = (
     case "PULL_REQUEST_NOT_FOUND":
       return "Pull Request nicht gefunden";
     case "PULL_REQUEST_ALREADY_MERGED":
-      return "Cannot update a merged pull request";
+      return "Kann einen gemergten Pull-Request nicht aktualisieren";
     case "UNAUTHENTICATED":
       return "Du musst eingeloggt sein, um ein Pull Request zu aktualisieren";
     case "UNAUTHORIZED":

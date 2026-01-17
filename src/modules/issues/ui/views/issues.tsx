@@ -105,35 +105,28 @@ export const Issues = ({ preloadedIssues, preloadedUsers }: IssuesProps) => {
   );
 
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [isCreating, setIsCreating] = useState(false);
-  const [isUpdating, setIsUpdating] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [editingIssue, setEditingIssue] = useState<Doc<"issues"> | null>(null);
   const [deletingId, setDeletingId] = useState<Id<"issues"> | null>(null);
 
-  const handleCreate = async (data: CreateIssue) => {
-    setIsCreating(true);
+  const handleSubmit = async (data: CreateIssue | UpdateIssue) => {
+    setIsSubmitting(true);
     try {
-      await createIssue(data);
+      if (editingIssue) {
+        await updateIssue({ id: editingIssue._id, ...data });
+      } else {
+        await createIssue(data);
+      }
     } catch (error) {
-      const parsedError = parseError<CreateIssueErrors>(error);
-      toast.error(getCreateIssueErrorMessage(parsedError));
+      if (editingIssue) {
+        const parsedError = parseError<UpdateIssueErrors>(error);
+        toast.error(getUpdateIssueErrorMessage(parsedError));
+      } else {
+        const parsedError = parseError<CreateIssueErrors>(error);
+        toast.error(getCreateIssueErrorMessage(parsedError));
+      }
     } finally {
-      setIsCreating(false);
-    }
-  };
-
-  const handleUpdate = async (data: UpdateIssue) => {
-    if (!editingIssue) return;
-
-    setIsUpdating(true);
-    try {
-      await updateIssue({ id: editingIssue._id, ...data });
-      setEditingIssue(null);
-    } catch (error) {
-      const parsedError = parseError<UpdateIssueErrors>(error);
-      toast.error(getUpdateIssueErrorMessage(parsedError));
-    } finally {
-      setIsUpdating(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -184,10 +177,10 @@ export const Issues = ({ preloadedIssues, preloadedUsers }: IssuesProps) => {
       </IssuesCard>
 
       <IssueForm
-        isLoading={isCreating || isUpdating}
+        isLoading={isSubmitting}
         issue={editingIssue ?? undefined}
         onOpenChange={handleFormClose}
-        onSubmit={editingIssue ? handleUpdate : handleCreate}
+        onSubmit={handleSubmit}
         open={isFormOpen}
         users={users}
       />

@@ -6,7 +6,14 @@ import { useEffect } from "react";
 
 import { ResponsiveDialog } from "@/components/responsive-dialog";
 import { Button } from "@/components/ui/button";
-import { Field, FieldError, FieldGroup } from "@/components/ui/field";
+import { DialogClose, DialogFooter } from "@/components/ui/dialog";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldSet,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Textarea } from "@/components/ui/textarea";
@@ -17,13 +24,14 @@ import { PREDEFINED_LABELS } from "../../../../../convex/issues/_lib/constants";
 import {
   type CreateIssue,
   createIssueSchema,
+  type UpdateIssue,
   updateIssueSchema,
 } from "../../schemas/issue.schema";
 
 interface IssueFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (data: CreateIssue) => Promise<void>;
+  onSubmit: (data: CreateIssue | UpdateIssue) => Promise<void>;
   isLoading?: boolean;
   issue?: Doc<"issues">;
   users: FunctionReturnType<typeof api.users.list.default>;
@@ -86,115 +94,113 @@ export const IssueForm = ({
       title={issue ? "Issue bearbeiten" : "Issue erstellen"}
     >
       <form className="space-y-4" onSubmit={handleSubmit}>
-        <FieldGroup>
-          <form.Field
-            children={(field) => {
-              const isInvalid =
-                field.state.meta.isTouched && !field.state.meta.isValid;
+        <FieldSet>
+          <FieldGroup>
+            <form.Field
+              children={(field) => {
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid;
 
-              return (
-                <Field data-invalid={isInvalid}>
-                  <label className="text-sm font-medium" htmlFor={field.name}>
-                    Titel
-                  </label>
-                  <Input
-                    aria-invalid={isInvalid}
-                    autoComplete="off"
+                return (
+                  <Field data-invalid={isInvalid}>
+                    <FieldLabel htmlFor={field.name}>Titel *</FieldLabel>
+                    <Input
+                      aria-invalid={isInvalid}
+                      autoComplete="off"
+                      disabled={isLoading}
+                      id={field.name}
+                      name={field.name}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      placeholder="Titel des Issues eingeben..."
+                      value={field.state.value}
+                    />
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </Field>
+                );
+              }}
+              name="title"
+            />
+          </FieldGroup>
+
+          <FieldGroup>
+            <form.Field
+              children={(field) => {
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid;
+
+                return (
+                  <Field data-invalid={isInvalid}>
+                    <FieldLabel htmlFor={field.name}>Beschreibung *</FieldLabel>
+                    <Textarea
+                      aria-invalid={isInvalid}
+                      className="min-h-[100px]"
+                      disabled={isLoading}
+                      id={field.name}
+                      name={field.name}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      placeholder="Beschreibung des Issues eingeben..."
+                      value={field.state.value}
+                    />
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </Field>
+                );
+              }}
+              name="description"
+            />
+          </FieldGroup>
+
+          <FieldGroup>
+            <form.Field
+              children={(field) => (
+                <Field>
+                  <FieldLabel htmlFor={field.name}>Labels</FieldLabel>
+                  <MultiSelect
+                    defaultValue={field.state.value}
                     disabled={isLoading}
-                    id={field.name}
-                    name={field.name}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder="Titel des Issues eingeben..."
+                    onValueChange={(value) => field.handleChange(value)}
+                    options={labelOptions}
+                    placeholder="Labels auswählen..."
+                  />
+                </Field>
+              )}
+              name="labels"
+            />
+          </FieldGroup>
+
+          <FieldGroup>
+            <form.Field
+              children={(field) => (
+                <Field>
+                  <FieldLabel htmlFor={field.name}>Zuweisen an</FieldLabel>
+                  <UserMultiSelect
+                    disabled={isLoading}
+                    onChange={(value) => field.handleChange(value)}
+                    placeholder="Zuweisen an..."
+                    users={users}
                     value={field.state.value}
                   />
-                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
                 </Field>
-              );
-            }}
-            name="title"
-          />
-        </FieldGroup>
-
-        <FieldGroup>
-          <form.Field
-            children={(field) => {
-              const isInvalid =
-                field.state.meta.isTouched && !field.state.meta.isValid;
-
-              return (
-                <Field data-invalid={isInvalid}>
-                  <label className="text-sm font-medium" htmlFor={field.name}>
-                    Beschreibung
-                  </label>
-                  <Textarea
-                    aria-invalid={isInvalid}
-                    className="min-h-[100px]"
-                    disabled={isLoading}
-                    id={field.name}
-                    name={field.name}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder="Beschreibung des Issues eingeben..."
-                    value={field.state.value}
-                  />
-                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                </Field>
-              );
-            }}
-            name="description"
-          />
-        </FieldGroup>
-
-        <FieldGroup>
-          <form.Field
-            children={(field) => (
-              <Field>
-                <label className="text-sm font-medium">Labels auswählen</label>
-                <MultiSelect
-                  defaultValue={field.state.value}
-                  disabled={isLoading}
-                  onValueChange={(value) => field.handleChange(value)}
-                  options={labelOptions}
-                  placeholder="Labels auswählen..."
-                />
-              </Field>
-            )}
-            name="labels"
-          />
-        </FieldGroup>
-
-        <FieldGroup>
-          <form.Field
-            children={(field) => (
-              <Field>
-                <label className="text-sm font-medium">Zuweisen</label>
-                <UserMultiSelect
-                  disabled={isLoading}
-                  onChange={(value) => field.handleChange(value)}
-                  placeholder="Zuweisen..."
-                  users={users}
-                  value={field.state.value}
-                />
-              </Field>
-            )}
-            name="assignees"
-          />
-        </FieldGroup>
-
-        <div className="flex justify-end gap-2">
-          <Button
-            disabled={isLoading}
-            onClick={handleClose}
-            type="button"
-            variant="outline"
-          >
-            Abbrechen
-          </Button>
+              )}
+              name="assignees"
+            />
+          </FieldGroup>
+        </FieldSet>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button disabled={isLoading} variant="outline">
+              Abbrechen
+            </Button>
+          </DialogClose>
           <Button disabled={isLoading} loading={isLoading} type="submit">
             {issue ? "Aktualisieren" : "Erstellen"}
           </Button>
-        </div>
+        </DialogFooter>
       </form>
     </ResponsiveDialog>
   );

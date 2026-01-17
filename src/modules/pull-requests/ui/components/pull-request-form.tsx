@@ -7,7 +7,14 @@ import { useEffect } from "react";
 
 import { ResponsiveDialog } from "@/components/responsive-dialog";
 import { Button } from "@/components/ui/button";
-import { Field, FieldError, FieldGroup } from "@/components/ui/field";
+import { DialogClose, DialogFooter } from "@/components/ui/dialog";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldSet,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,13 +25,14 @@ import { PREDEFINED_LABELS } from "../../../../../convex/issues/_lib/constants";
 import {
   type CreatePullRequest,
   createPullRequestSchema,
+  type UpdatePullRequest,
   updatePullRequestSchema,
 } from "../../schemas/pull-request.schema";
 
 interface PullRequestFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (data: CreatePullRequest) => Promise<void>;
+  onSubmit: (data: CreatePullRequest | UpdatePullRequest) => Promise<void>;
   isLoading?: boolean;
   pullRequest?: Doc<"pullRequests">;
   users: FunctionReturnType<typeof api.users.list.default>;
@@ -103,7 +111,7 @@ export const PullRequestForm = ({
       title={pullRequest ? "Pull Request bearbeiten" : "Pull Request erstellen"}
     >
       <form className="space-y-4" onSubmit={handleSubmit}>
-        <FieldGroup>
+        <FieldSet>
           <form.Field
             children={(field) => {
               const isInvalid =
@@ -111,9 +119,7 @@ export const PullRequestForm = ({
 
               return (
                 <Field data-invalid={isInvalid}>
-                  <label className="text-sm font-medium" htmlFor={field.name}>
-                    Titel
-                  </label>
+                  <FieldLabel htmlFor={field.name}>Titel *</FieldLabel>
                   <Input
                     aria-invalid={isInvalid}
                     autoComplete="off"
@@ -131,9 +137,7 @@ export const PullRequestForm = ({
             }}
             name="title"
           />
-        </FieldGroup>
 
-        <FieldGroup>
           <form.Field
             children={(field) => {
               const isInvalid =
@@ -141,9 +145,7 @@ export const PullRequestForm = ({
 
               return (
                 <Field data-invalid={isInvalid}>
-                  <label className="text-sm font-medium" htmlFor={field.name}>
-                    Beschreibung
-                  </label>
+                  <FieldLabel htmlFor={field.name}>Beschreibung *</FieldLabel>
                   <Textarea
                     aria-invalid={isInvalid}
                     className="min-h-[100px]"
@@ -161,9 +163,7 @@ export const PullRequestForm = ({
             }}
             name="description"
           />
-        </FieldGroup>
 
-        <FieldGroup>
           <form.Field
             children={(field) => {
               const isInvalid =
@@ -171,10 +171,11 @@ export const PullRequestForm = ({
 
               return (
                 <Field data-invalid={isInvalid}>
-                  <label className="text-sm font-medium">
+                  <FieldLabel htmlFor={field.name}>
                     Verbundene Issues *
-                  </label>
+                  </FieldLabel>
                   <MultiSelect
+                    aria-invalid={isInvalid}
                     defaultValue={field.state.value}
                     disabled={isLoading}
                     onValueChange={(value) => field.handleChange(value)}
@@ -187,13 +188,11 @@ export const PullRequestForm = ({
             }}
             name="issueIds"
           />
-        </FieldGroup>
 
-        <FieldGroup>
           <form.Field
             children={(field) => (
               <Field>
-                <label className="text-sm font-medium">Labels</label>
+                <FieldLabel htmlFor={field.name}>Labels</FieldLabel>
                 <MultiSelect
                   defaultValue={field.state.value}
                   disabled={isLoading}
@@ -205,13 +204,11 @@ export const PullRequestForm = ({
             )}
             name="labels"
           />
-        </FieldGroup>
 
-        <FieldGroup>
           <form.Field
             children={(field) => (
               <Field>
-                <label className="text-sm font-medium">Zuweisen an</label>
+                <FieldLabel htmlFor={field.name}>Zuweisen an</FieldLabel>
                 <UserMultiSelect
                   disabled={isLoading}
                   onChange={(value) => field.handleChange(value)}
@@ -223,13 +220,11 @@ export const PullRequestForm = ({
             )}
             name="assignees"
           />
-        </FieldGroup>
 
-        <FieldGroup>
           <form.Field
             children={(field) => (
               <Field>
-                <label className="text-sm font-medium">Reviewer</label>
+                <FieldLabel htmlFor={field.name}>Reviewer</FieldLabel>
                 <UserMultiSelect
                   disabled={isLoading}
                   onChange={(value) => field.handleChange(value)}
@@ -241,21 +236,18 @@ export const PullRequestForm = ({
             )}
             name="reviewers"
           />
-        </FieldGroup>
+        </FieldSet>
 
-        <div className="flex justify-end gap-2">
-          <Button
-            disabled={isLoading}
-            onClick={handleClose}
-            type="button"
-            variant="outline"
-          >
-            Abbrechen
-          </Button>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button disabled={isLoading} variant="outline">
+              Abbrechen
+            </Button>
+          </DialogClose>
           <Button disabled={isLoading} loading={isLoading} type="submit">
             {pullRequest ? "Aktualisieren" : "Erstellen"}
           </Button>
-        </div>
+        </DialogFooter>
       </form>
     </ResponsiveDialog>
   );

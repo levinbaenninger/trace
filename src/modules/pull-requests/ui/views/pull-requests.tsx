@@ -110,43 +110,35 @@ export const PullRequests = ({
   );
 
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [isCreating, setIsCreating] = useState(false);
-  const [isUpdating, setIsUpdating] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [editingPR, setEditingPR] = useState<Doc<"pullRequests"> | null>(null);
   const [deletingId, setDeletingId] = useState<Id<"pullRequests"> | null>(null);
 
-  const handleCreate = async (data: CreatePullRequest) => {
-    setIsCreating(true);
+  const handleSubmit = async (data: CreatePullRequest | UpdatePullRequest) => {
+    setIsSubmitting(true);
     try {
-      // Convert string IDs back to Id<"issues">
-      await createPullRequest({
-        ...data,
-        issueIds: data.issueIds as Id<"issues">[],
-      });
+      if (editingPR) {
+        await updatePullRequest({
+          id: editingPR._id,
+          ...data,
+          issueIds: data.issueIds as Id<"issues">[],
+        });
+      } else {
+        await createPullRequest({
+          ...data,
+          issueIds: data.issueIds as Id<"issues">[],
+        });
+      }
     } catch (error) {
-      const parsedError = parseError<CreatePullRequestErrors>(error);
-      toast.error(getCreatePullRequestErrorMessage(parsedError));
+      if (editingPR) {
+        const parsedError = parseError<UpdatePullRequestErrors>(error);
+        toast.error(getUpdatePullRequestErrorMessage(parsedError));
+      } else {
+        const parsedError = parseError<CreatePullRequestErrors>(error);
+        toast.error(getCreatePullRequestErrorMessage(parsedError));
+      }
     } finally {
-      setIsCreating(false);
-    }
-  };
-
-  const handleUpdate = async (data: UpdatePullRequest) => {
-    if (!editingPR) return;
-
-    setIsUpdating(true);
-    try {
-      await updatePullRequest({
-        id: editingPR._id,
-        ...data,
-        issueIds: data.issueIds as Id<"issues">[],
-      });
-      setEditingPR(null);
-    } catch (error) {
-      const parsedError = parseError<UpdatePullRequestErrors>(error);
-      toast.error(getUpdatePullRequestErrorMessage(parsedError));
-    } finally {
-      setIsUpdating(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -197,9 +189,9 @@ export const PullRequests = ({
       </PullRequestsCard>
 
       <PullRequestForm
-        isLoading={isCreating || isUpdating}
+        isLoading={isSubmitting}
         onOpenChange={handleFormClose}
-        onSubmit={editingPR ? handleUpdate : handleCreate}
+        onSubmit={handleSubmit}
         open={isFormOpen}
         pullRequest={editingPR ?? undefined}
         users={users}
