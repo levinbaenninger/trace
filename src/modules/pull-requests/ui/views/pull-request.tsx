@@ -27,9 +27,9 @@ import {
 } from "@/components/ui/empty";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { User } from "@/components/user";
-import { UserBadge } from "@/components/user-badge";
 import { Issue } from "@/modules/issues/ui/components/issue";
+import { User } from "@/modules/users/ui/components/user";
+import { UserBadge } from "@/modules/users/ui/components/user-badge";
 import { parseError } from "@/utils/error/parse";
 import { api } from "../../../../../convex/_generated/api";
 import type {
@@ -43,20 +43,30 @@ import {
 import { MergeDialog } from "../components/merge-dialog";
 
 interface PullRequestCardProps {
-  title?: string;
+  title?: string | ReactNode;
   children: ReactNode;
+  footer?: ReactNode;
+  metadata?: ReactNode;
 }
 
 const PullRequestCard = ({
   title = "Pull Request",
   children,
+  footer,
+  metadata,
 }: PullRequestCardProps) => {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
+        <div className="flex items-start justify-between">
+          <div className="space-y-2 flex-1">
+            <CardTitle>{title}</CardTitle>
+            {metadata}
+          </div>
+        </div>
       </CardHeader>
       <CardContent className="space-y-6">{children}</CardContent>
+      {footer}
     </Card>
   );
 };
@@ -93,94 +103,106 @@ export const PullRequest = ({
 
   const createdAt = new Date(pullRequest._creationTime);
 
+  const footer = !pullRequest.merged ? (
+    <>
+      <Separator />
+      <CardFooter>
+        <Button
+          className="w-full"
+          onClick={() => setIsMergeDialogOpen(true)}
+          size="lg"
+        >
+          <GitMerge className="h-4 w-4 mr-2" />
+          Pull Request mergen
+        </Button>
+      </CardFooter>
+    </>
+  ) : undefined;
+
   return (
     <>
-      <Card className="w-full">
-        <CardHeader>
-          <div className="flex items-start justify-between">
-            <div className="space-y-2 flex-1">
-              <CardTitle className="text-2xl">{pullRequest.title}</CardTitle>
-              <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                <div className="flex items-center gap-1">
-                  <Calendar className="h-4 w-4" />
-                  <span>{Intl.DateTimeFormat("de-CH").format(createdAt)}</span>
-                </div>
-                <User showAvatar userId={pullRequest.authorId} users={users} />
-              </div>
+      <PullRequestCard
+        footer={
+          !pullRequest.merged ? (
+            <>
+              <Separator />
+              <CardFooter>
+                <Button
+                  className="w-full"
+                  onClick={() => setIsMergeDialogOpen(true)}
+                  size="lg"
+                >
+                  <GitMerge className="h-4 w-4 mr-2" />
+                  Pull Request mergen
+                </Button>
+              </CardFooter>
+            </>
+          ) : undefined
+        }
+        metadata={
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <div className="flex items-center gap-1">
+              <Calendar className="h-4 w-4" />
+              <span>{Intl.DateTimeFormat("de-CH").format(createdAt)}</span>
             </div>
+            <User showAvatar userId={pullRequest.authorId} users={users} />
           </div>
-        </CardHeader>
+        }
+        title={pullRequest.title}
+      >
+        <div>
+          <h3 className="font-medium mb-2">Beschreibung</h3>
+          <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+            {pullRequest.description}
+          </p>
+        </div>
 
-        <CardContent className="space-y-6">
+        {pullRequest.issues.length > 0 && (
           <div>
-            <h3 className="text-sm font-medium mb-1">Beschreibung</h3>
-            <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-              {pullRequest.description}
-            </p>
+            <h3 className="font-medium mb-2">Verbundene Issues</h3>
+            <div className="space-y-2">
+              {pullRequest.issues.map((issue) => (
+                <Issue issue={issue} key={issue._id} />
+              ))}
+            </div>
           </div>
-
-          {pullRequest.issues.length > 0 && (
-            <div>
-              <h3 className="text-sm font-medium mb-2">Verbundene Issues</h3>
-              <div className="space-y-2">
-                {pullRequest.issues.map((issue) => (
-                  <Issue issue={issue} key={issue._id} />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {pullRequest.labels.length > 0 && (
-            <div>
-              <h3 className="text-sm font-medium mb-1">Labels</h3>
-              <div className="flex gap-2 flex-wrap">
-                {pullRequest.labels.map((label) => (
-                  <Badge key={label} variant="outline">
-                    {label}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {pullRequest.assignees.length > 0 && (
-            <div>
-              <h3 className="text-sm font-medium mb-1">Zuweisen an</h3>
-              <div className="flex gap-2 flex-wrap">
-                {pullRequest.assignees.map((assignee) => (
-                  <UserBadge key={assignee} userId={assignee} users={users} />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {pullRequest.reviewers.length > 0 && (
-            <div>
-              <h3 className="text-sm font-medium mb-1">Reviewer</h3>
-              <div className="flex gap-2 flex-wrap">
-                {pullRequest.reviewers.map((reviewer) => (
-                  <UserBadge key={reviewer} userId={reviewer} users={users} />
-                ))}
-              </div>
-            </div>
-          )}
-        </CardContent>
-        {!pullRequest.merged && (
-          <>
-            <Separator />
-            <CardFooter>
-              <Button
-                className="w-full"
-                onClick={() => setIsMergeDialogOpen(true)}
-                size="lg"
-              >
-                <GitMerge className="h-4 w-4 mr-2" />
-                Pull Request mergen
-              </Button>
-            </CardFooter>
-          </>
         )}
-      </Card>
+
+        {pullRequest.labels.length > 0 && (
+          <div>
+            <h3 className="font-medium mb-2">Labels</h3>
+            <div className="flex gap-2 flex-wrap">
+              {pullRequest.labels.map((label) => (
+                <Badge key={label} variant="outline">
+                  {label}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {pullRequest.assignees.length > 0 && (
+          <div>
+            <h3 className="font-medium mb-2">Zuweisen an</h3>
+            <div className="flex gap-2 flex-wrap">
+              {pullRequest.assignees.map((assignee) => (
+                <UserBadge key={assignee} userId={assignee} users={users} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {pullRequest.reviewers.length > 0 && (
+          <div>
+            <h3 className="font-medium mb-2">Reviewer</h3>
+            <div className="flex gap-2 flex-wrap">
+              {pullRequest.reviewers.map((reviewer) => (
+                <UserBadge key={reviewer} userId={reviewer} users={users} />
+              ))}
+            </div>
+          </div>
+        )}
+      </PullRequestCard>
 
       <MergeDialog
         isLoading={isMerging}
@@ -195,19 +217,53 @@ export const PullRequest = ({
 
 export const PullRequestLoading = () => {
   return (
-    <Card>
-      <CardHeader>
-        <Skeleton className="h-8 w-3/4" />
-        <Skeleton className="h-4 w-1/2 mt-2" />
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <Skeleton className="h-32 w-full" />
-        <div className="flex gap-2">
-          <Skeleton className="h-6 w-16" />
-          <Skeleton className="h-6 w-16" />
+    <PullRequestCard
+      metadata={
+        <div className="flex items-center gap-4">
+          <Skeleton className="h-4 w-24" />
+          <Skeleton className="h-4 w-32" />
         </div>
-      </CardContent>
-    </Card>
+      }
+      title={<Skeleton className="h-8 w-2/3" />}
+    >
+      <div>
+        <Skeleton className="h-5 w-24 mb-2" />
+        <Skeleton className="h-20 w-full" />
+      </div>
+
+      <div>
+        <Skeleton className="h-5 w-32 mb-2" />
+        <div className="space-y-2">
+          <Skeleton className="h-16 w-full" />
+          <Skeleton className="h-16 w-full" />
+        </div>
+      </div>
+
+      <div>
+        <Skeleton className="h-5 w-16 mb-2" />
+        <div className="flex gap-2 flex-wrap">
+          <Skeleton className="h-6 w-20" />
+          <Skeleton className="h-6 w-16" />
+          <Skeleton className="h-6 w-24" />
+        </div>
+      </div>
+
+      <div>
+        <Skeleton className="h-5 w-24 mb-2" />
+        <div className="flex gap-2 flex-wrap">
+          <Skeleton className="h-6 w-28" />
+          <Skeleton className="h-6 w-32" />
+        </div>
+      </div>
+
+      <div>
+        <Skeleton className="h-5 w-20 mb-2" />
+        <div className="flex gap-2 flex-wrap">
+          <Skeleton className="h-6 w-28" />
+          <Skeleton className="h-6 w-32" />
+        </div>
+      </div>
+    </PullRequestCard>
   );
 };
 

@@ -18,23 +18,29 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
-import { User } from "@/components/user";
-import { UserBadge } from "@/components/user-badge";
+import { User } from "@/modules/users/ui/components/user";
+import { UserBadge } from "@/modules/users/ui/components/user-badge";
 import { parseError } from "@/utils/error/parse";
 import { api } from "../../../../../convex/_generated/api";
 import { GetIssueErrors } from "../../../../../convex/issues/_lib/errors";
 import { getGetIssueErrorMessage } from "../../errors";
 
 interface IssueCardProps {
-  title?: string;
+  title?: string | ReactNode;
+  metadata?: ReactNode;
   children: ReactNode;
 }
 
-const IssueCard = ({ title = "Issue", children }: IssueCardProps) => {
+const IssueCard = ({ title = "Issue", children, metadata }: IssueCardProps) => {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
+        <div className="flex items-start justify-between">
+          <div className="space-y-2 flex-1">
+            <CardTitle>{title}</CardTitle>
+            {metadata}
+          </div>
+        </div>
       </CardHeader>
       <CardContent className="space-y-6">{children}</CardContent>
     </Card>
@@ -52,73 +58,85 @@ export const Issue = ({ preloadedIssue, preloadedUsers }: IssueProps) => {
   const createdAt = new Date(issue._creationTime);
 
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <div className="flex items-start justify-between">
-          <div className="space-y-2 flex-1">
-            <CardTitle className="text-2xl">{issue.title}</CardTitle>
-            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-              <div className="flex items-center gap-1">
-                <Calendar className="h-4 w-4" />
-                <span>{Intl.DateTimeFormat("de-CH").format(createdAt)}</span>
-              </div>
-              <User showAvatar userId={issue.authorId} users={users} />
-            </div>
+    <IssueCard
+      metadata={
+        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+          <div className="flex items-center gap-1">
+            <Calendar className="h-4 w-4" />
+            <span>{Intl.DateTimeFormat("de-CH").format(createdAt)}</span>
           </div>
+          <User showAvatar userId={issue.authorId} users={users} />
         </div>
-      </CardHeader>
+      }
+      title={issue.title}
+    >
+      <div>
+        <h3 className="font-medium mb-2">Beschreibung</h3>
+        <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+          {issue.description}
+        </p>
+      </div>
 
-      <CardContent className="space-y-6">
+      {issue.labels.length > 0 && (
         <div>
-          <h3 className="text-sm font-medium mb-1">Beschreibung</h3>
-          <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-            {issue.description}
-          </p>
+          <h3 className="font-medium mb-2">Labels</h3>
+          <div className="flex gap-2 flex-wrap">
+            {issue.labels.map((label) => (
+              <Badge key={label} variant="outline">
+                {label}
+              </Badge>
+            ))}
+          </div>
         </div>
+      )}
 
-        {issue.labels.length > 0 && (
-          <div>
-            <h3 className="text-sm font-medium mb-1">Labels</h3>
-            <div className="flex gap-2 flex-wrap">
-              {issue.labels.map((label) => (
-                <Badge key={label} variant="outline">
-                  {label}
-                </Badge>
-              ))}
-            </div>
+      {issue.assignees.length > 0 && (
+        <div>
+          <h3 className="font-medium mb-2">Zugewiesen an</h3>
+          <div className="flex gap-2 flex-wrap">
+            {issue.assignees.map((assignee) => (
+              <UserBadge key={assignee} userId={assignee} users={users} />
+            ))}
           </div>
-        )}
-
-        {issue.assignees.length > 0 && (
-          <div>
-            <h3 className="text-sm font-medium mb-1">Zugewiesen an</h3>
-            <div className="flex gap-2 flex-wrap">
-              {issue.assignees.map((assignee) => (
-                <UserBadge key={assignee} userId={assignee} users={users} />
-              ))}
-            </div>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+        </div>
+      )}
+    </IssueCard>
   );
 };
 
 export const IssueLoading = () => {
   return (
-    <Card>
-      <CardHeader>
-        <Skeleton className="h-8 w-3/4" />
-        <Skeleton className="h-4 w-1/2 mt-2" />
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <Skeleton className="h-32 w-full" />
-        <div className="flex gap-2">
-          <Skeleton className="h-6 w-16" />
-          <Skeleton className="h-6 w-16" />
+    <IssueCard
+      metadata={
+        <div className="flex items-center gap-4">
+          <Skeleton className="h-4 w-24" />
+          <Skeleton className="h-4 w-32" />
         </div>
-      </CardContent>
-    </Card>
+      }
+      title={<Skeleton className="h-8 w-2/3" />}
+    >
+      <div>
+        <Skeleton className="h-5 w-24 mb-2" />
+        <Skeleton className="h-20 w-full" />
+      </div>
+
+      <div>
+        <Skeleton className="h-5 w-16 mb-2" />
+        <div className="flex gap-2 flex-wrap">
+          <Skeleton className="h-6 w-20" />
+          <Skeleton className="h-6 w-16" />
+          <Skeleton className="h-6 w-24" />
+        </div>
+      </div>
+
+      <div>
+        <Skeleton className="h-5 w-28 mb-2" />
+        <div className="flex gap-2 flex-wrap">
+          <Skeleton className="h-6 w-28" />
+          <Skeleton className="h-6 w-32" />
+        </div>
+      </div>
+    </IssueCard>
   );
 };
 
