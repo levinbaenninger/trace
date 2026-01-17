@@ -103,22 +103,6 @@ export const PullRequest = ({
 
   const createdAt = new Date(pullRequest._creationTime);
 
-  const footer = !pullRequest.merged ? (
-    <>
-      <Separator />
-      <CardFooter>
-        <Button
-          className="w-full"
-          onClick={() => setIsMergeDialogOpen(true)}
-          size="lg"
-        >
-          <GitMerge className="h-4 w-4 mr-2" />
-          Pull Request mergen
-        </Button>
-      </CardFooter>
-    </>
-  ) : undefined;
-
   return (
     <>
       <PullRequestCard
