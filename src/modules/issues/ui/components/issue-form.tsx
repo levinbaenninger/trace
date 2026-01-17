@@ -17,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Textarea } from "@/components/ui/textarea";
-import { UserMultiSelect } from "@/components/user-select";
+import { UserMultiSelect } from "@/modules/users/ui/components/user-select";
 import { api } from "../../../../../convex/_generated/api";
 import type { Doc } from "../../../../../convex/_generated/dataModel";
 import { PREDEFINED_LABELS } from "../../../../../convex/issues/_lib/constants";
