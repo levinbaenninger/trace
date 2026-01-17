@@ -5,6 +5,7 @@ export const env = createEnv({
   server: {
     CLERK_JWT_ISSUER_DOMAIN: z.url(),
     CLERK_SECRET_KEY: z.string().min(1),
+    CLERK_WEBHOOK_SIGNING_SECRET: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_CONVEX_URL: z.url(),
@@ -17,6 +18,7 @@ export const env = createEnv({
   runtimeEnv: {
     CLERK_JWT_ISSUER_DOMAIN: process.env.CLERK_JWT_ISSUER_DOMAIN,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
+    CLERK_WEBHOOK_SIGNING_SECRET: process.env.CLERK_WEBHOOK_SIGNING_SECRET,
     NEXT_PUBLIC_CONVEX_URL: process.env.NEXT_PUBLIC_CONVEX_URL,
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
