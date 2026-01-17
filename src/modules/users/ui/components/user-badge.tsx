@@ -12,7 +12,7 @@ interface UserBadgeProps {
 
 export const UserBadge = ({ userId, users }: UserBadgeProps) => {
   const user = users?.find((u) => u.clerkId === userId);
-  const displayName = user?.firstName || userId.split("|")[1] || userId;
+  const displayName = user?.firstName || "Anonym";
 
   return (
     <div className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium">
