@@ -2,7 +2,7 @@
 
 import type { Preloaded } from "convex/react";
 import { useMutation, usePreloadedQuery } from "convex/react";
-import { AlertCircle, AlertCircleIcon, Plus } from "lucide-react";
+import { AlertCircle, Plus } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -209,7 +209,7 @@ const PullRequestsEmpty = () => {
     <Empty>
       <EmptyHeader>
         <EmptyMedia variant="icon">
-          <AlertCircleIcon />
+          <AlertCircle />
         </EmptyMedia>
         <EmptyTitle>Noch keine Pull Requests</EmptyTitle>
         <EmptyDescription>
