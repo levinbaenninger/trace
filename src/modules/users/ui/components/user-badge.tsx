@@ -3,7 +3,7 @@
 import type { FunctionReturnType } from "convex/server";
 import { User as UserIcon } from "lucide-react";
 
-import type { api } from "../../convex/_generated/api";
+import type { api } from "../../../../../convex/_generated/api";
 
 interface UserBadgeProps {
   userId: string;
