@@ -21,13 +21,22 @@ const PullRequestPage = async ({ params }: PullRequestPageProps) => {
 
   const token = await getToken();
 
-  const [preloadedPullRequest, preloadedUsers] = await Promise.all([
+  const [
+    preloadedPullRequest,
+    preloadedUsers,
+    preloadedComments,
+    preloadedCurrentUserId,
+  ] = await Promise.all([
     preloadQuery(api.pullRequests.get.default, { id }, { token }),
     preloadQuery(api.users.list.default, {}, { token }),
+    preloadQuery(api.comments.list.default, { pullRequestId: id }, { token }),
+    preloadQuery(api.users.getCurrentUserId.default, {}, { token }),
   ]);
 
   return (
     <PullRequest
+      preloadedComments={preloadedComments}
+      preloadedCurrentUserId={preloadedCurrentUserId}
       preloadedPullRequest={preloadedPullRequest}
       preloadedUsers={preloadedUsers}
     />
