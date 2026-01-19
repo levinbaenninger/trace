@@ -57,9 +57,13 @@ export const Commits = ({ preloadedCommits }: CommitsProps) => {
     <CommitsCard>
       {isEmpty && <CommitsEmpty />}
 
-      <div className="space-y-2">
-        {commits.map((commit) => (
-          <Commit commit={commit} key={commit._id} />
+      <div className="space-y-0">
+        {commits.map((commit, index) => (
+          <Commit
+            commit={commit}
+            isLast={index === commits.length - 1}
+            key={commit._id}
+          />
         ))}
       </div>
     </CommitsCard>
@@ -90,18 +94,39 @@ export const CommitsLoading = () => {
         <Skeleton className="h-4 w-1/2" />
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="space-y-2">
+        <div className="space-y-0">
           {Array.from({ length: 3 }).map((_, index) => (
-            <Item key={index} variant="outline">
-              <Skeleton className="size-8" />
-              <ItemContent>
-                <Skeleton className="h-4 w-1/2" />
-              </ItemContent>
-              <ItemActions>
-                <Skeleton className="size-8" />
-                <Skeleton className="size-8" />
-              </ItemActions>
-            </Item>
+            <div className="relative flex gap-4 pb-4 last:pb-0" key={index}>
+              {/* Timeline column skeleton */}
+              <div className="relative flex items-center py-6">
+                {/* Line going down (except for last item) */}
+                {index < 2 && (
+                  <div
+                    className="absolute left-1/2 w-0.5 -translate-x-1/2 bg-border"
+                    style={{
+                      top: "50%",
+                      bottom: "calc(-1rem - 1.5rem - 0.375rem)",
+                      marginTop: "0.375rem",
+                    }}
+                  />
+                )}
+                {/* Dot skeleton */}
+                <Skeleton className="size-3 rounded-full" />
+              </div>
+
+              {/* Item content skeleton */}
+              <div className="flex-1">
+                <Item variant="outline">
+                  <ItemContent>
+                    <Skeleton className="h-4 w-1/2" />
+                    <Skeleton className="h-3 w-32" />
+                  </ItemContent>
+                  <ItemActions>
+                    <Skeleton className="h-8 w-8 md:w-32" />
+                  </ItemActions>
+                </Item>
+              </div>
+            </div>
           ))}
         </div>
       </CardContent>
