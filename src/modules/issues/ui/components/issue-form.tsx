@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Textarea } from "@/components/ui/textarea";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { UserMultiSelect } from "@/modules/users/ui/components/user-select";
 import { api } from "../../../../../convex/_generated/api";
 import type { Doc } from "../../../../../convex/_generated/dataModel";
@@ -50,6 +51,8 @@ export const IssueForm = ({
   issue,
   users,
 }: IssueFormProps) => {
+  const isMobile = useIsMobile();
+
   const form = useForm({
     defaultValues: {
       title: issue?.title ?? "",
@@ -165,9 +168,11 @@ export const IssueForm = ({
                   <MultiSelect
                     defaultValue={field.state.value}
                     disabled={isLoading}
+                    hideSelectAll={true}
                     onValueChange={(value) => field.handleChange(value)}
                     options={labelOptions}
                     placeholder="Labels auswählen..."
+                    searchable={!isMobile}
                   />
                 </Field>
               )}

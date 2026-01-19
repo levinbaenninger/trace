@@ -18,6 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Textarea } from "@/components/ui/textarea";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { UserMultiSelect } from "@/modules/users/ui/components/user-select";
 import { api } from "../../../../../convex/_generated/api";
 import type { Doc } from "../../../../../convex/_generated/dataModel";
@@ -52,6 +53,7 @@ export const PullRequestForm = ({
   users,
 }: PullRequestFormProps) => {
   const issues = useQuery(api.issues.list.default);
+  const isMobile = useIsMobile();
 
   const issueOptions =
     issues?.map((issue) => ({
@@ -180,9 +182,11 @@ export const PullRequestForm = ({
                     aria-invalid={isInvalid}
                     defaultValue={field.state.value}
                     disabled={isLoading}
+                    hideSelectAll={true}
                     onValueChange={(value) => field.handleChange(value)}
                     options={issueOptions}
                     placeholder="Issues auswählen..."
+                    searchable={!isMobile}
                   />
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
                 </Field>
@@ -198,9 +202,11 @@ export const PullRequestForm = ({
                 <MultiSelect
                   defaultValue={field.state.value}
                   disabled={isLoading}
+                  hideSelectAll={true}
                   onValueChange={(value) => field.handleChange(value)}
                   options={labelOptions}
                   placeholder="Labels auswählen..."
+                  searchable={!isMobile}
                 />
               </Field>
             )}

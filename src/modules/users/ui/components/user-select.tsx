@@ -3,6 +3,7 @@
 import type { FunctionReturnType } from "convex/server";
 
 import { MultiSelect } from "@/components/ui/multi-select";
+import { useIsMobile } from "@/hooks/use-mobile";
 import type { api } from "../../../../../convex/_generated/api";
 
 interface UserMultiSelectProps {
@@ -20,6 +21,8 @@ export const UserMultiSelect = ({
   placeholder = "Benutzer auswählen...",
   users,
 }: UserMultiSelectProps) => {
+  const isMobile = useIsMobile();
+
   const userOptions =
     users?.map((user) => ({
       label: user.firstName,
@@ -29,10 +32,11 @@ export const UserMultiSelect = ({
   return (
     <MultiSelect
       disabled={disabled}
+      hideSelectAll={true}
       onValueChange={onChange}
       options={userOptions}
       placeholder={placeholder}
-      searchable
+      searchable={!isMobile}
       value={value}
     />
   );
