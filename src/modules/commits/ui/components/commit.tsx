@@ -23,12 +23,12 @@ export const Commit = ({ commit, isLast = false }: CommitProps) => {
   const isMobile = useIsMobile();
   const date = new Date(commit._creationTime);
 
-  const formattedTime = date.toLocaleTimeString("de-DE", {
+  const formattedTime = date.toLocaleTimeString("de-CH", {
     hour: "2-digit",
     minute: "2-digit",
   });
 
-  const formattedDate = date.toLocaleDateString("de-DE", {
+  const formattedDate = date.toLocaleDateString("de-CH", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
