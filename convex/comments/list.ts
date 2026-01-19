@@ -10,7 +10,6 @@ export default query({
   handler: async (ctx, args) => {
     await requireAuth(ctx);
 
-    // Verify pull request exists
     const pullRequest = await ctx.db.get(args.pullRequestId);
     if (!pullRequest) {
       throw new ConvexError<ListCommentsErrors>({
@@ -19,7 +18,6 @@ export default query({
       });
     }
 
-    // Fetch all comments for this pull request
     const comments = await ctx.db
       .query("comments")
       .withIndex("by_pull_request", (q) =>
@@ -27,7 +25,6 @@ export default query({
       )
       .collect();
 
-    // Sort by creation time (oldest first)
     return comments.sort((a, b) => a._creationTime - b._creationTime);
   },
 });

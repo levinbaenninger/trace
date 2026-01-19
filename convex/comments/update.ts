@@ -11,14 +11,12 @@ export default mutation({
   handler: async (ctx, args) => {
     const identity = await requireAuth(ctx);
 
-    // Validate content is not empty
     if (!args.content.trim()) {
       throw new ConvexError<UpdateCommentErrors>({
         code: "COMMENT_CONTENT_EMPTY",
       });
     }
 
-    // Verify comment exists
     const comment = await ctx.db.get(args.id);
     if (!comment) {
       throw new ConvexError<UpdateCommentErrors>({
@@ -27,14 +25,12 @@ export default mutation({
       });
     }
 
-    // Only the author can edit their comment
     if (comment.authorId !== identity.subject) {
       throw new ConvexError<UpdateCommentErrors>({
         code: "UNAUTHORIZED",
       });
     }
 
-    // Update the comment
     await ctx.db.patch(args.id, {
       content: args.content.trim(),
     });

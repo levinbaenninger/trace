@@ -10,7 +10,6 @@ export default mutation({
   handler: async (ctx, args) => {
     const identity = await requireAuth(ctx);
 
-    // Verify comment exists
     const comment = await ctx.db.get(args.id);
     if (!comment) {
       throw new ConvexError<DeleteCommentErrors>({
@@ -19,14 +18,12 @@ export default mutation({
       });
     }
 
-    // Only the author can delete their comment
     if (comment.authorId !== identity.subject) {
       throw new ConvexError<DeleteCommentErrors>({
         code: "UNAUTHORIZED",
       });
     }
 
-    // Delete the comment
     await ctx.db.delete(args.id);
 
     return { success: true };

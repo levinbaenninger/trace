@@ -11,14 +11,12 @@ export default mutation({
   handler: async (ctx, args) => {
     const identity = await requireAuth(ctx);
 
-    // Validate content is not empty
     if (!args.content.trim()) {
       throw new ConvexError<CreateCommentErrors>({
         code: "COMMENT_CONTENT_EMPTY",
       });
     }
 
-    // Verify pull request exists
     const pullRequest = await ctx.db.get(args.pullRequestId);
     if (!pullRequest) {
       throw new ConvexError<CreateCommentErrors>({
@@ -27,7 +25,6 @@ export default mutation({
       });
     }
 
-    // Create the comment
     const commentId = await ctx.db.insert("comments", {
       pullRequestId: args.pullRequestId,
       content: args.content.trim(),
