@@ -12,7 +12,7 @@ export default mutation({
     assignees: v.array(v.string()),
   },
   handler: async (ctx, args) => {
-    await requireAuth(ctx);
+    const identity = await requireAuth(ctx);
 
     const issue = await ctx.db.get(args.id);
 
@@ -20,6 +20,12 @@ export default mutation({
       throw new ConvexError<UpdateIssueErrors>({
         code: "ISSUE_NOT_FOUND",
         issueId: args.id,
+      });
+    }
+
+    if (issue.authorId !== identity.subject) {
+      throw new ConvexError<UpdateIssueErrors>({
+        code: "UNAUTHORIZED",
       });
     }
 

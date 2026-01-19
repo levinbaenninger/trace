@@ -15,13 +15,19 @@ const IssuesPage = async () => {
 
   const token = await getToken();
 
-  const [preloadedIssues, preloadedUsers] = await Promise.all([
-    preloadQuery(api.issues.list.default, {}, { token }),
-    preloadQuery(api.users.list.default, {}, { token }),
-  ]);
+  const [preloadedIssues, preloadedUsers, preloadedCurrentUserId] =
+    await Promise.all([
+      preloadQuery(api.issues.list.default, {}, { token }),
+      preloadQuery(api.users.list.default, {}, { token }),
+      preloadQuery(api.users.getCurrentUserId.default, {}, { token }),
+    ]);
 
   return (
-    <Issues preloadedIssues={preloadedIssues} preloadedUsers={preloadedUsers} />
+    <Issues
+      preloadedCurrentUserId={preloadedCurrentUserId}
+      preloadedIssues={preloadedIssues}
+      preloadedUsers={preloadedUsers}
+    />
   );
 };
 

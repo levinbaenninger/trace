@@ -16,10 +16,6 @@ type CommentContentEmptyError = DomainError & {
   code: "COMMENT_CONTENT_EMPTY";
 };
 
-type UnauthorizedError = DomainError & {
-  code: "UNAUTHORIZED";
-};
-
 export type CreateCommentErrors =
   | AuthError
   | PullRequestNotFoundError
@@ -32,7 +28,4 @@ export type UpdateCommentErrors =
   | CommentNotFoundError
   | CommentContentEmptyError;
 
-export type DeleteCommentErrors =
-  | AuthError
-  | CommentNotFoundError
-  | UnauthorizedError;
+export type DeleteCommentErrors = AuthError | CommentNotFoundError;

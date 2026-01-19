@@ -15,6 +15,7 @@ import type { Doc, Id } from "../../../../../convex/_generated/dataModel";
 
 interface PullRequestProps {
   pullRequest: Doc<"pullRequests">;
+  currentUserId: string;
   onEdit: (pr: Doc<"pullRequests">) => void;
   onDelete: (id: Id<"pullRequests">) => void;
   isDeleting?: boolean;
@@ -22,10 +23,13 @@ interface PullRequestProps {
 
 export const PullRequest = ({
   pullRequest,
+  currentUserId,
   onEdit,
   onDelete,
   isDeleting,
 }: PullRequestProps) => {
+  const isAuthor = pullRequest.authorId === currentUserId;
+
   return (
     <Item variant="outline">
       <ItemMedia variant="icon">
@@ -40,7 +44,7 @@ export const PullRequest = ({
           <Link href={`/pulls/${pullRequest._id}`}>{pullRequest.title}</Link>
         </ItemTitle>
       </ItemContent>
-      {!pullRequest.merged && (
+      {!pullRequest.merged && isAuthor && (
         <ItemActions>
           <Button
             aria-label="Pull Request bearbeiten"

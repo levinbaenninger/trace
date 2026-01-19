@@ -90,14 +90,17 @@ const PullRequestsCard = ({
 interface PullRequestsProps {
   preloadedPullRequests: Preloaded<typeof api.pullRequests.list.default>;
   preloadedUsers: Preloaded<typeof api.users.list.default>;
+  preloadedCurrentUserId: Preloaded<typeof api.users.getCurrentUserId.default>;
 }
 
 export const PullRequests = ({
   preloadedPullRequests,
   preloadedUsers,
+  preloadedCurrentUserId,
 }: PullRequestsProps) => {
   const pullRequests = usePreloadedQuery(preloadedPullRequests);
   const users = usePreloadedQuery(preloadedUsers);
+  const currentUserId = usePreloadedQuery(preloadedCurrentUserId);
   const createPullRequest = useMutation(api.pullRequests.create.default);
   const updatePullRequest = useMutation(api.pullRequests.update.default);
   const removePullRequest = useMutation(api.pullRequests.remove.default);
@@ -182,6 +185,7 @@ export const PullRequests = ({
         <div className="space-y-2">
           {pullRequests.map((pr) => (
             <PullRequest
+              currentUserId={currentUserId}
               isDeleting={deletingId === pr._id}
               key={pr._id}
               onDelete={handleDelete}

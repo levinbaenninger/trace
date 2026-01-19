@@ -88,11 +88,17 @@ const IssuesCard = ({
 interface IssuesProps {
   preloadedIssues: Preloaded<typeof api.issues.list.default>;
   preloadedUsers: Preloaded<typeof api.users.list.default>;
+  preloadedCurrentUserId: Preloaded<typeof api.users.getCurrentUserId.default>;
 }
 
-export const Issues = ({ preloadedIssues, preloadedUsers }: IssuesProps) => {
+export const Issues = ({
+  preloadedIssues,
+  preloadedUsers,
+  preloadedCurrentUserId,
+}: IssuesProps) => {
   const issues = usePreloadedQuery(preloadedIssues);
   const users = usePreloadedQuery(preloadedUsers);
+  const currentUserId = usePreloadedQuery(preloadedCurrentUserId);
   const createIssue = useMutation(api.issues.create.default);
   const updateIssue = useMutation(api.issues.update.default);
   const removeIssue = useMutation(api.issues.remove.default);
@@ -170,6 +176,7 @@ export const Issues = ({ preloadedIssues, preloadedUsers }: IssuesProps) => {
         <div className="space-y-2">
           {issues.map((issue) => (
             <Issue
+              currentUserId={currentUserId}
               isDeleting={deletingId === issue._id}
               issue={issue}
               key={issue._id}
