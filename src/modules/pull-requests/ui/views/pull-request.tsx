@@ -155,7 +155,11 @@ export const PullRequest = ({
             <h3 className="font-medium mb-2">Verbundene Issues</h3>
             <div className="space-y-2">
               {pullRequest.issues.map((issue) => (
-                <Issue issue={issue} key={issue._id} />
+                <Issue
+                  currentUserId={currentUserId}
+                  issue={issue}
+                  key={issue._id}
+                />
               ))}
             </div>
           </div>
