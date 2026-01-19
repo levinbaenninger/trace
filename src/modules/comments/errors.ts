@@ -13,6 +13,10 @@ export const getCreateCommentErrorMessage = (
       return "Pull Request nicht gefunden";
     case "COMMENT_CONTENT_EMPTY":
       return "Kommentar darf nicht leer sein";
+    case "UNAUTHENTICATED":
+      return "Sie sind nicht angemeldet";
+    case "UNAUTHORIZED":
+      return "Sie sind nicht berechtigt, diesen Kommentar zu erstellen";
     default:
       return "Unbekannter Fehler beim Erstellen des Kommentars";
   }
@@ -24,6 +28,10 @@ export const getListCommentsErrorMessage = (
   switch (error.code) {
     case "PULL_REQUEST_NOT_FOUND":
       return "Pull Request nicht gefunden";
+    case "UNAUTHENTICATED":
+      return "Sie sind nicht angemeldet";
+    case "UNAUTHORIZED":
+      return "Sie sind nicht berechtigt, diese Kommentare zu lesen";
     default:
       return "Unbekannter Fehler beim Laden der Kommentare";
   }
@@ -35,6 +43,8 @@ export const getDeleteCommentErrorMessage = (
   switch (error.code) {
     case "COMMENT_NOT_FOUND":
       return "Kommentar nicht gefunden";
+    case "UNAUTHENTICATED":
+      return "Sie sind nicht angemeldet";
     case "UNAUTHORIZED":
       return "Sie sind nicht berechtigt, diesen Kommentar zu löschen";
     default:
@@ -48,6 +58,8 @@ export const getUpdateCommentErrorMessage = (
   switch (error.code) {
     case "COMMENT_NOT_FOUND":
       return "Kommentar nicht gefunden";
+    case "UNAUTHENTICATED":
+      return "Sie sind nicht angemeldet";
     case "UNAUTHORIZED":
       return "Sie sind nicht berechtigt, diesen Kommentar zu bearbeiten";
     case "COMMENT_CONTENT_EMPTY":

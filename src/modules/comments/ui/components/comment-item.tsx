@@ -3,7 +3,7 @@
 import { useForm } from "@tanstack/react-form";
 import { useMutation } from "convex/react";
 import type { FunctionReturnType } from "convex/server";
-import { Check, Pencil, Trash2, X } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -125,7 +125,6 @@ export const CommentItem = ({
               <Button
                 className="h-8 w-8"
                 disabled={isDeleting || isEditing}
-                loading={isEditing}
                 onClick={handleEdit}
                 size="icon"
                 variant="ghost"

@@ -25,16 +25,16 @@ export default mutation({
       });
     }
 
+    if (pullRequest.authorId !== identity.subject) {
+      throw new ConvexError<UpdatePullRequestErrors>({
+        code: "UNAUTHORIZED",
+      });
+    }
+
     if (pullRequest.merged) {
       throw new ConvexError<UpdatePullRequestErrors>({
         code: "PULL_REQUEST_ALREADY_MERGED",
         pullRequestId: args.id,
-      });
-    }
-
-    if (pullRequest.authorId !== identity.subject) {
-      throw new ConvexError<UpdatePullRequestErrors>({
-        code: "UNAUTHORIZED",
       });
     }
 
