@@ -17,6 +17,12 @@ export default mutation({
       });
     }
 
+    if (pullRequest.authorId !== identity.subject) {
+      throw new ConvexError<RemovePullRequestErrors>({
+        code: "UNAUTHORIZED",
+      });
+    }
+
     if (pullRequest.merged) {
       throw new ConvexError<RemovePullRequestErrors>({
         code: "PULL_REQUEST_ALREADY_MERGED",
@@ -24,12 +30,15 @@ export default mutation({
       });
     }
 
-    if (pullRequest.authorId !== identity.subject) {
-      throw new ConvexError<RemovePullRequestErrors>({
-        code: "UNAUTHORIZED",
-      });
-    }
-
     await ctx.db.delete(args.id);
+
+    const comments = await ctx.db
+      .query("comments")
+      .withIndex("by_pull_request", (q) => q.eq("pullRequestId", args.id))
+      .collect();
+
+    for (const comment of comments) {
+      await ctx.db.delete(comment._id);
+    }
   },
 });
