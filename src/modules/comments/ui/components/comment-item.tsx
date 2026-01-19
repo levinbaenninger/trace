@@ -1,12 +1,17 @@
 "use client";
 
+import { api } from "@convex/_generated/api";
+import type { Id } from "@convex/_generated/dataModel";
+import type {
+  DeleteCommentErrors,
+  UpdateCommentErrors,
+} from "@convex/comments/_lib/errors";
 import { useForm } from "@tanstack/react-form";
 import { useMutation } from "convex/react";
 import type { FunctionReturnType } from "convex/server";
 import { Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,12 +22,6 @@ import {
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { parseError } from "@/utils/error/parse";
-import { api } from "../../../../../convex/_generated/api";
-import type { Id } from "../../../../../convex/_generated/dataModel";
-import type {
-  DeleteCommentErrors,
-  UpdateCommentErrors,
-} from "../../../../../convex/comments/_lib/errors";
 import {
   getDeleteCommentErrorMessage,
   getUpdateCommentErrorMessage,

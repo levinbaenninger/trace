@@ -1,9 +1,8 @@
 "use client";
 
+import type { api } from "@convex/_generated/api";
 import type { FunctionReturnType } from "convex/server";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import type { api } from "../../../../../convex/_generated/api";
 
 interface UserProps {
   userId: string;

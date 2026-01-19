@@ -1,12 +1,11 @@
 "use client";
 
+import { api } from "@convex/_generated/api";
+import type { Id } from "@convex/_generated/dataModel";
 import type { Preloaded } from "convex/react";
 import { usePreloadedQuery } from "convex/react";
 import type { FunctionReturnType } from "convex/server";
-
 import { Skeleton } from "@/components/ui/skeleton";
-import { api } from "../../../../../convex/_generated/api";
-import type { Id } from "../../../../../convex/_generated/dataModel";
 import { CommentForm } from "./comment-form";
 import { CommentItem } from "./comment-item";
 

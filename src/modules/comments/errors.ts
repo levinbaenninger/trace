@@ -3,7 +3,7 @@ import type {
   DeleteCommentErrors,
   ListCommentsErrors,
   UpdateCommentErrors,
-} from "../../../convex/comments/_lib/errors";
+} from "@convex/comments/_lib/errors";
 
 export const getCreateCommentErrorMessage = (
   error: CreateCommentErrors

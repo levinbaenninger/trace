@@ -1,10 +1,12 @@
 "use client";
 
+import { api } from "@convex/_generated/api";
+import type { Doc } from "@convex/_generated/dataModel";
+import { PREDEFINED_LABELS } from "@convex/issues/_lib/constants";
 import { useForm } from "@tanstack/react-form";
 import { useQuery } from "convex/react";
 import type { FunctionReturnType } from "convex/server";
 import { useEffect } from "react";
-
 import { ResponsiveDialog } from "@/components/responsive-dialog";
 import { Button } from "@/components/ui/button";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
@@ -20,9 +22,6 @@ import { MultiSelect } from "@/components/ui/multi-select";
 import { Textarea } from "@/components/ui/textarea";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { UserMultiSelect } from "@/modules/users/ui/components/user-select";
-import { api } from "../../../../../convex/_generated/api";
-import type { Doc } from "../../../../../convex/_generated/dataModel";
-import { PREDEFINED_LABELS } from "../../../../../convex/issues/_lib/constants";
 import {
   type CreatePullRequest,
   createPullRequestSchema,

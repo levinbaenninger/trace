@@ -1,10 +1,9 @@
 import { RedirectToSignIn } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
+import { api } from "@convex/_generated/api";
 import { preloadQuery } from "convex/nextjs";
-
 import { getToken } from "@/lib/auth";
 import { Issues } from "@/modules/issues/ui/views/issues";
-import { api } from "../../../../convex/_generated/api";
 
 const IssuesPage = async () => {
   const { isAuthenticated } = await auth();

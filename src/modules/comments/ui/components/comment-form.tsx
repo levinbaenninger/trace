@@ -1,10 +1,12 @@
 "use client";
 
+import { api } from "@convex/_generated/api";
+import type { Id } from "@convex/_generated/dataModel";
+import type { CreateCommentErrors } from "@convex/comments/_lib/errors";
 import { useForm } from "@tanstack/react-form";
 import { useMutation } from "convex/react";
 import { ArrowUpIcon } from "lucide-react";
 import { toast } from "sonner";
-
 import {
   InputGroup,
   InputGroupAddon,
@@ -12,9 +14,6 @@ import {
   InputGroupTextarea,
 } from "@/components/ui/input-group";
 import { parseError } from "@/utils/error/parse";
-import { api } from "../../../../../convex/_generated/api";
-import type { Id } from "../../../../../convex/_generated/dataModel";
-import type { CreateCommentErrors } from "../../../../../convex/comments/_lib/errors";
 import { getCreateCommentErrorMessage } from "../../errors";
 
 interface CommentFormProps {

@@ -1,10 +1,10 @@
 "use client";
 
+import { api } from "@convex/_generated/api";
 import type { Preloaded } from "convex/react";
 import { usePreloadedQuery } from "convex/react";
 import { AlertCircle, AlertCircleIcon } from "lucide-react";
 import type { ReactNode } from "react";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,7 +23,6 @@ import {
 } from "@/components/ui/empty";
 import { Item, ItemActions, ItemContent } from "@/components/ui/item";
 import { Skeleton } from "@/components/ui/skeleton";
-import { api } from "../../../../../convex/_generated/api";
 import { Commit } from "../components/commit";
 
 interface CommitsCardProps {

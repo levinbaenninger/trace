@@ -1,11 +1,10 @@
 import { RedirectToSignIn } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
+import { api } from "@convex/_generated/api";
+import type { Id } from "@convex/_generated/dataModel";
 import { preloadQuery } from "convex/nextjs";
-
 import { getToken } from "@/lib/auth";
 import { Issue } from "@/modules/issues/ui/views/issue";
-import { api } from "../../../../../convex/_generated/api";
-import type { Id } from "../../../../../convex/_generated/dataModel";
 
 interface IssuePageProps {
   params: Promise<{ id: Id<"issues"> }>;

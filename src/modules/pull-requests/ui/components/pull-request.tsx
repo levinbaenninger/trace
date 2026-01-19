@@ -1,8 +1,8 @@
 "use client";
 
+import type { Doc, Id } from "@convex/_generated/dataModel";
 import { GitMerge, GitPullRequest, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
-
 import { Button } from "@/components/ui/button";
 import {
   Item,
@@ -11,7 +11,6 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item";
-import type { Doc, Id } from "../../../../../convex/_generated/dataModel";
 
 interface PullRequestProps {
   pullRequest: Doc<"pullRequests">;

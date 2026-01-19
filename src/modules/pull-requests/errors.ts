@@ -4,7 +4,7 @@ import type {
   MergePullRequestErrors,
   RemovePullRequestErrors,
   UpdatePullRequestErrors,
-} from "../../../convex/pullRequests/_lib/errors";
+} from "@convex/pullRequests/_lib/errors";
 
 export const getCreatePullRequestErrorMessage = (
   error: CreatePullRequestErrors

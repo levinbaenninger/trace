@@ -1,5 +1,10 @@
 "use client";
 
+import { api } from "@convex/_generated/api";
+import type {
+  GetPullRequestErrors,
+  MergePullRequestErrors,
+} from "@convex/pullRequests/_lib/errors";
 import type { Preloaded } from "convex/react";
 import { useMutation, usePreloadedQuery, useQuery } from "convex/react";
 import { AlertCircle, Calendar, GitMerge } from "lucide-react";
@@ -7,7 +12,6 @@ import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { toast } from "sonner";
-
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,11 +39,6 @@ import { Issue } from "@/modules/issues/ui/components/issue";
 import { User } from "@/modules/users/ui/components/user";
 import { UserBadge } from "@/modules/users/ui/components/user-badge";
 import { parseError } from "@/utils/error/parse";
-import { api } from "../../../../../convex/_generated/api";
-import type {
-  GetPullRequestErrors,
-  MergePullRequestErrors,
-} from "../../../../../convex/pullRequests/_lib/errors";
 import {
   getGetPullRequestErrorMessage,
   getMergePullRequestErrorMessage,
