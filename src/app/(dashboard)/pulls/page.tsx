@@ -1,9 +1,9 @@
 import { RedirectToSignIn } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
+import { api } from "@convex/_generated/api";
 import { preloadQuery } from "convex/nextjs";
 import { getToken } from "@/lib/auth";
 import { PullRequests } from "@/modules/pull-requests/ui/views/pull-requests";
-import { api } from "../../../../convex/_generated/api";
 
 const PullRequestsPage = async () => {
   const { isAuthenticated } = await auth();
@@ -14,13 +14,16 @@ const PullRequestsPage = async () => {
 
   const token = await getToken();
 
-  const [preloadedPullRequests, preloadedUsers] = await Promise.all([
-    preloadQuery(api.pullRequests.list.default, {}, { token }),
-    preloadQuery(api.users.list.default, {}, { token }),
-  ]);
+  const [preloadedPullRequests, preloadedUsers, preloadedCurrentUserId] =
+    await Promise.all([
+      preloadQuery(api.pullRequests.list.default, {}, { token }),
+      preloadQuery(api.users.list.default, {}, { token }),
+      preloadQuery(api.users.getCurrentUserId.default, {}, { token }),
+    ]);
 
   return (
     <PullRequests
+      preloadedCurrentUserId={preloadedCurrentUserId}
       preloadedPullRequests={preloadedPullRequests}
       preloadedUsers={preloadedUsers}
     />

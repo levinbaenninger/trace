@@ -3,7 +3,7 @@ import type {
   GetIssueErrors,
   RemoveIssueErrors,
   UpdateIssueErrors,
-} from "../../../convex/issues/_lib/errors";
+} from "@convex/issues/_lib/errors";
 
 export const getCreateIssueErrorMessage = (
   error: CreateIssueErrors

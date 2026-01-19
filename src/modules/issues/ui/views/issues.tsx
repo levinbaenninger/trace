@@ -1,12 +1,18 @@
 "use client";
 
+import { api } from "@convex/_generated/api";
+import type { Doc, Id } from "@convex/_generated/dataModel";
+import type {
+  CreateIssueErrors,
+  RemoveIssueErrors,
+  UpdateIssueErrors,
+} from "@convex/issues/_lib/errors";
 import type { Preloaded } from "convex/react";
 import { useMutation, usePreloadedQuery } from "convex/react";
 import { AlertCircle, AlertCircleIcon, Plus } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { toast } from "sonner";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -30,13 +36,6 @@ import { useConfirm } from "@/hooks/use-confirm";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { parseError } from "@/utils/error/parse";
-import { api } from "../../../../../convex/_generated/api";
-import type { Doc, Id } from "../../../../../convex/_generated/dataModel";
-import type {
-  CreateIssueErrors,
-  RemoveIssueErrors,
-  UpdateIssueErrors,
-} from "../../../../../convex/issues/_lib/errors";
 import {
   getCreateIssueErrorMessage,
   getRemoveIssueErrorMessage,
@@ -88,11 +87,17 @@ const IssuesCard = ({
 interface IssuesProps {
   preloadedIssues: Preloaded<typeof api.issues.list.default>;
   preloadedUsers: Preloaded<typeof api.users.list.default>;
+  preloadedCurrentUserId: Preloaded<typeof api.users.getCurrentUserId.default>;
 }
 
-export const Issues = ({ preloadedIssues, preloadedUsers }: IssuesProps) => {
+export const Issues = ({
+  preloadedIssues,
+  preloadedUsers,
+  preloadedCurrentUserId,
+}: IssuesProps) => {
   const issues = usePreloadedQuery(preloadedIssues);
   const users = usePreloadedQuery(preloadedUsers);
+  const currentUserId = usePreloadedQuery(preloadedCurrentUserId);
   const createIssue = useMutation(api.issues.create.default);
   const updateIssue = useMutation(api.issues.update.default);
   const removeIssue = useMutation(api.issues.remove.default);
@@ -170,6 +175,7 @@ export const Issues = ({ preloadedIssues, preloadedUsers }: IssuesProps) => {
         <div className="space-y-2">
           {issues.map((issue) => (
             <Issue
+              currentUserId={currentUserId}
               isDeleting={deletingId === issue._id}
               issue={issue}
               key={issue._id}

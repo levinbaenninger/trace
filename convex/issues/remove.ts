@@ -6,7 +6,7 @@ import type { RemoveIssueErrors } from "./_lib/errors";
 export default mutation({
   args: { id: v.id("issues") },
   handler: async (ctx, args) => {
-    await requireAuth(ctx);
+    const identity = await requireAuth(ctx);
 
     const issue = await ctx.db.get(args.id);
 
@@ -14,6 +14,12 @@ export default mutation({
       throw new ConvexError<RemoveIssueErrors>({
         code: "ISSUE_NOT_FOUND",
         issueId: args.id,
+      });
+    }
+
+    if (issue.authorId !== identity.subject) {
+      throw new ConvexError<RemoveIssueErrors>({
+        code: "UNAUTHORIZED",
       });
     }
 

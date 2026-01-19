@@ -1,8 +1,8 @@
 "use client";
 
+import type { Doc } from "@convex/_generated/dataModel";
 import { EyeIcon, GitCommit } from "lucide-react";
 import Link from "next/link";
-
 import { Button } from "@/components/ui/button";
 import {
   Item,
@@ -12,7 +12,6 @@ import {
   ItemTitle,
 } from "@/components/ui/item";
 import { useIsMobile } from "@/hooks/use-mobile";
-import type { Doc } from "../../../../../convex/_generated/dataModel";
 
 interface CommitProps {
   commit: Doc<"commits">;

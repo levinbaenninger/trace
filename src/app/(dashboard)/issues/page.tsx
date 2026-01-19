@@ -1,10 +1,9 @@
 import { RedirectToSignIn } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
+import { api } from "@convex/_generated/api";
 import { preloadQuery } from "convex/nextjs";
-
 import { getToken } from "@/lib/auth";
 import { Issues } from "@/modules/issues/ui/views/issues";
-import { api } from "../../../../convex/_generated/api";
 
 const IssuesPage = async () => {
   const { isAuthenticated } = await auth();
@@ -15,13 +14,19 @@ const IssuesPage = async () => {
 
   const token = await getToken();
 
-  const [preloadedIssues, preloadedUsers] = await Promise.all([
-    preloadQuery(api.issues.list.default, {}, { token }),
-    preloadQuery(api.users.list.default, {}, { token }),
-  ]);
+  const [preloadedIssues, preloadedUsers, preloadedCurrentUserId] =
+    await Promise.all([
+      preloadQuery(api.issues.list.default, {}, { token }),
+      preloadQuery(api.users.list.default, {}, { token }),
+      preloadQuery(api.users.getCurrentUserId.default, {}, { token }),
+    ]);
 
   return (
-    <Issues preloadedIssues={preloadedIssues} preloadedUsers={preloadedUsers} />
+    <Issues
+      preloadedCurrentUserId={preloadedCurrentUserId}
+      preloadedIssues={preloadedIssues}
+      preloadedUsers={preloadedUsers}
+    />
   );
 };
 

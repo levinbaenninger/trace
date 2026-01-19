@@ -1,8 +1,8 @@
 "use client";
 
+import type { Doc, Id } from "@convex/_generated/dataModel";
 import { CircleCheck, CircleDot, Pencil, Trash2 } from "lucide-react";
 import Link from "next/link";
-
 import { Button } from "@/components/ui/button";
 import {
   Item,
@@ -11,16 +11,24 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@/components/ui/item";
-import type { Doc, Id } from "../../../../../convex/_generated/dataModel";
 
 interface IssueProps {
   issue: Doc<"issues">;
+  currentUserId: string;
   onEdit?: (issue: Doc<"issues">) => void;
   onDelete?: (id: Id<"issues">) => void;
   isDeleting?: boolean;
 }
 
-export const Issue = ({ issue, onEdit, onDelete, isDeleting }: IssueProps) => {
+export const Issue = ({
+  issue,
+  currentUserId,
+  onEdit,
+  onDelete,
+  isDeleting,
+}: IssueProps) => {
+  const isAuthor = issue.authorId === currentUserId;
+
   return (
     <Item variant="outline">
       <ItemMedia variant="icon">
@@ -35,32 +43,34 @@ export const Issue = ({ issue, onEdit, onDelete, isDeleting }: IssueProps) => {
           <Link href={`/issues/${issue._id}`}>{issue.title}</Link>
         </ItemTitle>
       </ItemContent>
-      <ItemActions>
-        {onEdit && (
-          <Button
-            aria-label="Issue bearbeiten"
-            disabled={isDeleting}
-            loading={isDeleting}
-            onClick={() => onEdit(issue)}
-            size="icon"
-            variant="outline"
-          >
-            <Pencil aria-hidden="true" />
-          </Button>
-        )}
-        {onDelete && (
-          <Button
-            aria-label="Issue löschen"
-            disabled={isDeleting}
-            loading={isDeleting}
-            onClick={() => onDelete(issue._id)}
-            size="icon"
-            variant="outline"
-          >
-            <Trash2 aria-hidden="true" />
-          </Button>
-        )}
-      </ItemActions>
+      {isAuthor && (
+        <ItemActions>
+          {onEdit && (
+            <Button
+              aria-label="Issue bearbeiten"
+              disabled={isDeleting}
+              loading={isDeleting}
+              onClick={() => onEdit(issue)}
+              size="icon"
+              variant="outline"
+            >
+              <Pencil aria-hidden="true" />
+            </Button>
+          )}
+          {onDelete && (
+            <Button
+              aria-label="Issue löschen"
+              disabled={isDeleting}
+              loading={isDeleting}
+              onClick={() => onDelete(issue._id)}
+              size="icon"
+              variant="outline"
+            >
+              <Trash2 aria-hidden="true" />
+            </Button>
+          )}
+        </ItemActions>
+      )}
     </Item>
   );
 };

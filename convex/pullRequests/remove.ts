@@ -6,7 +6,7 @@ import type { RemovePullRequestErrors } from "./_lib/errors";
 export default mutation({
   args: { id: v.id("pullRequests") },
   handler: async (ctx, args) => {
-    await requireAuth(ctx);
+    const identity = await requireAuth(ctx);
 
     const pullRequest = await ctx.db.get(args.id);
 
@@ -14,6 +14,12 @@ export default mutation({
       throw new ConvexError<RemovePullRequestErrors>({
         code: "PULL_REQUEST_NOT_FOUND",
         pullRequestId: args.id,
+      });
+    }
+
+    if (pullRequest.authorId !== identity.subject) {
+      throw new ConvexError<RemovePullRequestErrors>({
+        code: "UNAUTHORIZED",
       });
     }
 
@@ -25,5 +31,14 @@ export default mutation({
     }
 
     await ctx.db.delete(args.id);
+
+    const comments = await ctx.db
+      .query("comments")
+      .withIndex("by_pull_request", (q) => q.eq("pullRequestId", args.id))
+      .collect();
+
+    for (const comment of comments) {
+      await ctx.db.delete(comment._id);
+    }
   },
 });

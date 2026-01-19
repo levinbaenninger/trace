@@ -1,13 +1,17 @@
 "use client";
 
+import { api } from "@convex/_generated/api";
+import type {
+  GetPullRequestErrors,
+  MergePullRequestErrors,
+} from "@convex/pullRequests/_lib/errors";
 import type { Preloaded } from "convex/react";
-import { useMutation, usePreloadedQuery } from "convex/react";
+import { useMutation, usePreloadedQuery, useQuery } from "convex/react";
 import { AlertCircle, Calendar, GitMerge } from "lucide-react";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { toast } from "sonner";
-
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,15 +31,14 @@ import {
 } from "@/components/ui/empty";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  CommentsSection,
+  CommentsSectionLoading,
+} from "@/modules/comments/ui/components/comments-section";
 import { Issue } from "@/modules/issues/ui/components/issue";
 import { User } from "@/modules/users/ui/components/user";
 import { UserBadge } from "@/modules/users/ui/components/user-badge";
 import { parseError } from "@/utils/error/parse";
-import { api } from "../../../../../convex/_generated/api";
-import type {
-  GetPullRequestErrors,
-  MergePullRequestErrors,
-} from "../../../../../convex/pullRequests/_lib/errors";
 import {
   getGetPullRequestErrorMessage,
   getMergePullRequestErrorMessage,
@@ -74,14 +77,19 @@ const PullRequestCard = ({
 interface PullRequestProps {
   preloadedPullRequest: Preloaded<typeof api.pullRequests.get.default>;
   preloadedUsers: Preloaded<typeof api.users.list.default>;
+  preloadedComments: Preloaded<typeof api.comments.list.default>;
+  preloadedCurrentUserId: Preloaded<typeof api.users.getCurrentUserId.default>;
 }
 
 export const PullRequest = ({
   preloadedPullRequest,
   preloadedUsers,
+  preloadedComments,
+  preloadedCurrentUserId,
 }: PullRequestProps) => {
   const pullRequest = usePreloadedQuery(preloadedPullRequest);
   const users = usePreloadedQuery(preloadedUsers);
+  const currentUserId = usePreloadedQuery(preloadedCurrentUserId);
   const mergePullRequest = useMutation(api.pullRequests.merge.default);
 
   const [isMergeDialogOpen, setIsMergeDialogOpen] = useState(false);
@@ -104,7 +112,7 @@ export const PullRequest = ({
   const createdAt = new Date(pullRequest._creationTime);
 
   return (
-    <>
+    <div className="flex flex-col gap-6">
       <PullRequestCard
         footer={
           !pullRequest.merged ? (
@@ -146,7 +154,11 @@ export const PullRequest = ({
             <h3 className="font-medium mb-2">Verbundene Issues</h3>
             <div className="space-y-2">
               {pullRequest.issues.map((issue) => (
-                <Issue issue={issue} key={issue._id} />
+                <Issue
+                  currentUserId={currentUserId}
+                  issue={issue}
+                  key={issue._id}
+                />
               ))}
             </div>
           </div>
@@ -188,6 +200,15 @@ export const PullRequest = ({
         )}
       </PullRequestCard>
 
+      <Separator />
+
+      <CommentsSection
+        currentUserId={currentUserId}
+        preloadedComments={preloadedComments}
+        pullRequestId={pullRequest._id}
+        users={users}
+      />
+
       <MergeDialog
         isLoading={isMerging}
         issueCount={pullRequest.issueIds.length}
@@ -195,59 +216,65 @@ export const PullRequest = ({
         onOpenChange={setIsMergeDialogOpen}
         open={isMergeDialogOpen}
       />
-    </>
+    </div>
   );
 };
 
 export const PullRequestLoading = () => {
   return (
-    <PullRequestCard
-      metadata={
-        <div className="flex items-center gap-4">
-          <Skeleton className="h-4 w-24" />
-          <Skeleton className="h-4 w-32" />
+    <div className="flex flex-col gap-4">
+      <PullRequestCard
+        metadata={
+          <div className="flex items-center gap-4">
+            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-4 w-32" />
+          </div>
+        }
+        title={<Skeleton className="h-8 w-2/3" />}
+      >
+        <div>
+          <Skeleton className="h-5 w-24 mb-2" />
+          <Skeleton className="h-20 w-full" />
         </div>
-      }
-      title={<Skeleton className="h-8 w-2/3" />}
-    >
-      <div>
-        <Skeleton className="h-5 w-24 mb-2" />
-        <Skeleton className="h-20 w-full" />
-      </div>
 
-      <div>
-        <Skeleton className="h-5 w-32 mb-2" />
-        <div className="space-y-2">
-          <Skeleton className="h-16 w-full" />
-          <Skeleton className="h-16 w-full" />
+        <div>
+          <Skeleton className="h-5 w-32 mb-2" />
+          <div className="space-y-2">
+            <Skeleton className="h-16 w-full" />
+            <Skeleton className="h-16 w-full" />
+          </div>
         </div>
-      </div>
 
-      <div>
-        <Skeleton className="h-5 w-16 mb-2" />
-        <div className="flex gap-2 flex-wrap">
-          <Skeleton className="h-6 w-20" />
-          <Skeleton className="h-6 w-16" />
-          <Skeleton className="h-6 w-24" />
+        <div>
+          <Skeleton className="h-5 w-16 mb-2" />
+          <div className="flex gap-2 flex-wrap">
+            <Skeleton className="h-6 w-20" />
+            <Skeleton className="h-6 w-16" />
+            <Skeleton className="h-6 w-24" />
+          </div>
         </div>
-      </div>
 
-      <div>
-        <Skeleton className="h-5 w-24 mb-2" />
-        <div className="flex gap-2 flex-wrap">
-          <Skeleton className="h-6 w-28" />
-          <Skeleton className="h-6 w-32" />
+        <div>
+          <Skeleton className="h-5 w-24 mb-2" />
+          <div className="flex gap-2 flex-wrap">
+            <Skeleton className="h-6 w-28" />
+            <Skeleton className="h-6 w-32" />
+          </div>
         </div>
-      </div>
 
-      <div>
-        <Skeleton className="h-5 w-20 mb-2" />
-        <div className="flex gap-2 flex-wrap">
-          <Skeleton className="h-6 w-28" />
-          <Skeleton className="h-6 w-32" />
+        <div>
+          <Skeleton className="h-5 w-20 mb-2" />
+          <div className="flex gap-2 flex-wrap">
+            <Skeleton className="h-6 w-28" />
+            <Skeleton className="h-6 w-32" />
+          </div>
         </div>
-      </div>
-    </PullRequestCard>
+      </PullRequestCard>
+
+      <Separator />
+
+      <CommentsSectionLoading />
+    </div>
   );
 };
 

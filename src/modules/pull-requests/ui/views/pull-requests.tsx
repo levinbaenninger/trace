@@ -1,12 +1,18 @@
 "use client";
 
+import { api } from "@convex/_generated/api";
+import type { Doc, Id } from "@convex/_generated/dataModel";
+import type {
+  CreatePullRequestErrors,
+  RemovePullRequestErrors,
+  UpdatePullRequestErrors,
+} from "@convex/pullRequests/_lib/errors";
 import type { Preloaded } from "convex/react";
 import { useMutation, usePreloadedQuery } from "convex/react";
 import { AlertCircle, Plus } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { toast } from "sonner";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -30,13 +36,6 @@ import { useConfirm } from "@/hooks/use-confirm";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { parseError } from "@/utils/error/parse";
-import { api } from "../../../../../convex/_generated/api";
-import type { Doc, Id } from "../../../../../convex/_generated/dataModel";
-import type {
-  CreatePullRequestErrors,
-  RemovePullRequestErrors,
-  UpdatePullRequestErrors,
-} from "../../../../../convex/pullRequests/_lib/errors";
 import {
   getCreatePullRequestErrorMessage,
   getRemovePullRequestErrorMessage,
@@ -90,14 +89,17 @@ const PullRequestsCard = ({
 interface PullRequestsProps {
   preloadedPullRequests: Preloaded<typeof api.pullRequests.list.default>;
   preloadedUsers: Preloaded<typeof api.users.list.default>;
+  preloadedCurrentUserId: Preloaded<typeof api.users.getCurrentUserId.default>;
 }
 
 export const PullRequests = ({
   preloadedPullRequests,
   preloadedUsers,
+  preloadedCurrentUserId,
 }: PullRequestsProps) => {
   const pullRequests = usePreloadedQuery(preloadedPullRequests);
   const users = usePreloadedQuery(preloadedUsers);
+  const currentUserId = usePreloadedQuery(preloadedCurrentUserId);
   const createPullRequest = useMutation(api.pullRequests.create.default);
   const updatePullRequest = useMutation(api.pullRequests.update.default);
   const removePullRequest = useMutation(api.pullRequests.remove.default);
@@ -182,6 +184,7 @@ export const PullRequests = ({
         <div className="space-y-2">
           {pullRequests.map((pr) => (
             <PullRequest
+              currentUserId={currentUserId}
               isDeleting={deletingId === pr._id}
               key={pr._id}
               onDelete={handleDelete}

@@ -14,7 +14,7 @@ export default mutation({
     labels: v.array(v.string()),
   },
   handler: async (ctx, args) => {
-    await requireAuth(ctx);
+    const identity = await requireAuth(ctx);
 
     const pullRequest = await ctx.db.get(args.id);
 
@@ -22,6 +22,12 @@ export default mutation({
       throw new ConvexError<UpdatePullRequestErrors>({
         code: "PULL_REQUEST_NOT_FOUND",
         pullRequestId: args.id,
+      });
+    }
+
+    if (pullRequest.authorId !== identity.subject) {
+      throw new ConvexError<UpdatePullRequestErrors>({
+        code: "UNAUTHORIZED",
       });
     }
 

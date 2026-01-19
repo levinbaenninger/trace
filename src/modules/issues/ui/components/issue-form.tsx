@@ -1,9 +1,11 @@
 "use client";
 
+import { api } from "@convex/_generated/api";
+import type { Doc } from "@convex/_generated/dataModel";
+import { PREDEFINED_LABELS } from "@convex/issues/_lib/constants";
 import { useForm } from "@tanstack/react-form";
 import type { FunctionReturnType } from "convex/server";
 import { useEffect } from "react";
-
 import { ResponsiveDialog } from "@/components/responsive-dialog";
 import { Button } from "@/components/ui/button";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
@@ -17,10 +19,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Textarea } from "@/components/ui/textarea";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { UserMultiSelect } from "@/modules/users/ui/components/user-select";
-import { api } from "../../../../../convex/_generated/api";
-import type { Doc } from "../../../../../convex/_generated/dataModel";
-import { PREDEFINED_LABELS } from "../../../../../convex/issues/_lib/constants";
 import {
   type CreateIssue,
   createIssueSchema,
@@ -50,6 +50,8 @@ export const IssueForm = ({
   issue,
   users,
 }: IssueFormProps) => {
+  const isMobile = useIsMobile();
+
   const form = useForm({
     defaultValues: {
       title: issue?.title ?? "",
@@ -165,9 +167,11 @@ export const IssueForm = ({
                   <MultiSelect
                     defaultValue={field.state.value}
                     disabled={isLoading}
+                    hideSelectAll={true}
                     onValueChange={(value) => field.handleChange(value)}
                     options={labelOptions}
                     placeholder="Labels auswählen..."
+                    searchable={!isMobile}
                   />
                 </Field>
               )}

@@ -33,4 +33,10 @@ export default defineSchema({
     firstName: v.string(),
     imageUrl: v.optional(v.string()),
   }).index("by_clerk_id", ["clerkId"]),
+
+  comments: defineTable({
+    pullRequestId: v.id("pullRequests"),
+    content: v.string(),
+    authorId: v.string(),
+  }).index("by_pull_request", ["pullRequestId"]),
 });

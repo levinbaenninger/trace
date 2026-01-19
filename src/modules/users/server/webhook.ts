@@ -1,7 +1,6 @@
 import type { DeletedObjectJSON, UserJSON } from "@clerk/nextjs/server";
-
+import { api } from "@convex/_generated/api";
 import { convex } from "@/lib/convex";
-import { api } from "../../../../convex/_generated/api";
 
 export const handleUserCreated = async (user: UserJSON) => {
   await convex.mutation(api.users.create.default, {
