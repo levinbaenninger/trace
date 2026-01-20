@@ -55,10 +55,15 @@ export const PullRequestForm = ({
   const isMobile = useIsMobile();
 
   const issueOptions =
-    issues?.map((issue) => ({
-      label: `#${issue._id.slice(-6)} - ${issue.title}`,
-      value: issue._id,
-    })) ?? [];
+    issues
+      ?.filter((issue) => {
+        const selectedIssueIds = pullRequest?.issueIds.map(String) ?? [];
+        return issue.status === "open" || selectedIssueIds.includes(issue._id);
+      })
+      .map((issue) => ({
+        label: issue.title,
+        value: issue._id,
+      })) ?? [];
 
   const form = useForm({
     defaultValues: {
