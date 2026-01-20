@@ -56,7 +56,10 @@ export const PullRequestForm = ({
 
   const issueOptions =
     issues
-      ?.filter((issue) => issue.status === "open")
+      ?.filter((issue) => {
+        const selectedIssueIds = pullRequest?.issueIds.map(String) ?? [];
+        return issue.status === "open" || selectedIssueIds.includes(issue._id);
+      })
       .map((issue) => ({
         label: issue.title,
         value: issue._id,
