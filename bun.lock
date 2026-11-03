@@ -68,7 +68,7 @@
         "@types/react-dom": "^19.3.0",
         "husky": "^9.1.7",
         "lint-staged": "^17.6.0",
-        "mprocs": "^0.8.3",
+        "mprocs": "^0.9.6",
         "tailwindcss": "^4.3.4",
         "tw-animate-css": "^1.4.0",
         "typescript": "^5.9.3",
@@ -738,7 +738,7 @@
 
     "minipass": ["minipass@7.1.3", "", {}, "sha512-tEBHqDnIoM/1rXME1zgka9g6Q2lcoCkxHLuc7ODJ5BxbP5d4c2Z5cGgtXAku59200Cx7diuHTOYfSBD8n6mm8A=="],
 
-    "mprocs": ["mprocs@0.8.3", "", { "bin": { "mprocs": "cli.js" } }, "sha512-q3uKG6YLWF9l+fnEgu9CC4qMzEIPSYYMlbTIYdeHYCxGcIm67m4uQmQFmuDr6h69rWPHWJX5N/ih5Ei4h8G9Yg=="],
+    "mprocs": ["mprocs@0.9.6", "", { "bin": { "mprocs": "cli.js" } }, "sha512-sEwB5XD3/rReB47h0YbN2L5fXOLcMjF8sOEDTMr/daCLyVZfU4CegbanxO0ybiaFx0MQ/nV7yzOHmprmy2Wq9w=="],
 
     "nanoid": ["nanoid@3.3.20", "", { "bin": { "nanoid": "bin/nanoid.cjs" } }, "sha512-uKdg2G3GNCKQn9byYOpxbGqrT2fGO5KRt5J/8b3pok8rT6qxGWF6hxMyJiEYtAf+FVyYuD9hRaDqX5uPFYJ4ZQ=="],
 
